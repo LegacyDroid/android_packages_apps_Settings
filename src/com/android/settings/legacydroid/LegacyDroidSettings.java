@@ -5,7 +5,6 @@ import android.app.NotificationManager;
 import android.app.settings.SettingsEnums;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -17,7 +16,7 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.android.settings.R;
-import com.android.settings.SettingsActivity;
+import com.android.settings.core.SubSettingLauncher;
 import com.android.settings.dashboard.DashboardFragment;
 import com.android.settings.search.BaseSearchIndexProvider;
 import com.android.settingslib.core.AbstractPreferenceController;
@@ -27,6 +26,7 @@ import com.android.settingslib.search.SearchIndexable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 @SearchIndexable(forTarget = SearchIndexable.ALL & ~SearchIndexable.ARC)
 public class LegacyDroidSettings extends DashboardFragment {
@@ -36,6 +36,10 @@ public class LegacyDroidSettings extends DashboardFragment {
     private static final String KEY_SAVED_PROFILE = "saved_profile";
     private static final String PREFS_CUSTOM = "legacy_droid_customization";
     private static final String KEY_UPDATABLE_DRIVER = "updatable_driver_all_apps";
+
+    private static final String ANIM_WINDOW = "window_animation_scale";
+    private static final String ANIM_TRANSITION = "transition_animation_scale";
+    private static final String ANIM_ANIMATOR = "animator_duration_scale";
 
     private static final String KEY_BALANCE = "profile_balance";
     private static final String KEY_PERFORMANCE = "profile_performance";
@@ -75,6 +79,10 @@ public class LegacyDroidSettings extends DashboardFragment {
         SharedPreferences prefs = getContext().getSharedPreferences(PREFS_NAME, 0);
         mActiveProfile = prefs.getString(KEY_SAVED_PROFILE, "balance");
 
+        String[] taglines = getResources().getStringArray(R.array.legacy_droid_taglines);
+        String tagline = taglines[ThreadLocalRandom.current().nextInt(taglines.length)];
+        getPreferenceScreen().setSummary(tagline);
+
         setupProfilePref(KEY_BALANCE, "balance");
         setupProfilePref(KEY_PERFORMANCE, "performance");
         setupProfilePref(KEY_BATTERY_SAVER, "battery_saver");
@@ -97,15 +105,12 @@ public class LegacyDroidSettings extends DashboardFragment {
         });
 
         pref.setGearClickListener(v -> {
-            Intent intent = new Intent(getActivity(), SettingsActivity.class);
-            intent.putExtra(SettingsActivity.EXTRA_SHOW_FRAGMENT,
-                    ProfileCustomizationFragment.class.getName());
-            intent.putExtra(SettingsActivity.EXTRA_SHOW_FRAGMENT_ARGUMENTS,
-                    ProfileCustomizationFragment.createArgs(profileName));
-            intent.putExtra(SettingsActivity.EXTRA_SHOW_FRAGMENT_TITLE_RESID,
-                    getTitleResForProfile(profileName));
-            intent.putExtra(SettingsActivity.EXTRA_SHOW_FRAGMENT_AS_SUBSETTING, true);
-            startActivity(intent);
+            new SubSettingLauncher(getContext())
+                    .setDestination(ProfileCustomizationFragment.class.getName())
+                    .setArguments(ProfileCustomizationFragment.createArgs(profileName))
+                    .setTitleRes(getTitleResForProfile(profileName))
+                    .setSourceMetricsCategory(getMetricsCategory())
+                    .launch();
         });
     }
 
@@ -148,6 +153,7 @@ public class LegacyDroidSettings extends DashboardFragment {
                 if (custom.getBoolean(profile + "_action_high_refresh", true)) setHighRefreshRate();
                 if (custom.getBoolean(profile + "_action_game_driver", true)) setGameDriver(true);
                 if (custom.getBoolean(profile + "_action_dnd", true)) setDnd(true);
+                setAnimationScales(0f);
                 break;
 
             case "battery_saver":
@@ -156,6 +162,7 @@ public class LegacyDroidSettings extends DashboardFragment {
                 setMasterSync(true);
                 setGameDriver(false);
                 setDnd(false);
+                setAnimationScales(0f);
                 break;
 
             case "balance":
@@ -165,6 +172,7 @@ public class LegacyDroidSettings extends DashboardFragment {
                 resetRefreshRate();
                 setGameDriver(false);
                 setDnd(false);
+                setAnimationScales(1f);
                 break;
         }
 
@@ -172,6 +180,14 @@ public class LegacyDroidSettings extends DashboardFragment {
                 getString(R.string.legacy_droid_profile_applied,
                         getString(getTitleResForProfile(profile))),
                 Toast.LENGTH_SHORT).show();
+    }
+
+    private void setAnimationScales(float scale) {
+        try {
+            Settings.Global.putFloat(getContentResolver(), ANIM_WINDOW, scale);
+            Settings.Global.putFloat(getContentResolver(), ANIM_TRANSITION, scale);
+            Settings.Global.putFloat(getContentResolver(), ANIM_ANIMATOR, scale);
+        } catch (Exception ignored) {}
     }
 
     private void stopBackgroundApps() {

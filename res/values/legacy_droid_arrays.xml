@@ -10,4 +10,10 @@
         <item>performance</item>
         <item>battery_saver</item>
     </string-array>
+    <string-array name="legacy_droid_taglines">
+        <item>Your hardware, your rules.</item>
+        <item>The Android 11 you were always promised.</item>
+        <item>Old don\'t always mean bad.</item>
+        <item>LegacyDroid: Because transitions shouldn\'t look like ass.</item>
+    </string-array>
 </resources>

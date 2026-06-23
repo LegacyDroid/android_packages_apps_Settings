@@ -3310,6 +3310,13 @@
             </intent-filter>
         </receiver>
 
+        <receiver android:name=".legacydroid.LegacyDroidBootReceiver"
+                  android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
+
         <service android:name=".fuelgauge.batterytip.AnomalyCleanupJobService"
                  android:permission="android.permission.BIND_JOB_SERVICE" />
 
