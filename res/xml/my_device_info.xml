@@ -28,6 +28,12 @@
         android:selectable="false"
         settings:isPreferenceVisible="false"/>
 
+    <com.android.settingslib.widget.LayoutPreference
+        android:key="legacy_droid_banner"
+        android:order="0"
+        android:layout="@layout/legacy_droid_banner"
+        android:selectable="false" />
+
     <!-- Device name -->
     <com.android.settings.widget.ValidatedEditTextPreference
         android:key="device_name"

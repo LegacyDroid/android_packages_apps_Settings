@@ -16,17 +16,22 @@
 
 package com.android.settings.deviceinfo.aboutphone;
 
-import android.app.Activity;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.settings.SettingsEnums;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.UserInfo;
+import android.content.res.Configuration;
+import android.graphics.Rect;
 import android.os.Bundle;
-import android.os.UserManager;
+import android.util.TypedValue;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.android.settings.R;
-import com.android.settings.Utils;
 import com.android.settings.dashboard.DashboardFragment;
 import com.android.settings.deviceinfo.BluetoothAddressPreferenceController;
 import com.android.settings.deviceinfo.BuildNumberPreferenceController;
@@ -42,7 +47,6 @@ import com.android.settings.deviceinfo.WifiMacAddressPreferenceController;
 import com.android.settings.deviceinfo.imei.ImeiInfoPreferenceController;
 import com.android.settings.deviceinfo.simstatus.SimStatusPreferenceController;
 import com.android.settings.search.BaseSearchIndexProvider;
-import com.android.settings.widget.EntityHeaderController;
 import com.android.settingslib.core.AbstractPreferenceController;
 import com.android.settingslib.core.lifecycle.Lifecycle;
 import com.android.settingslib.search.SearchIndexable;
@@ -83,6 +87,13 @@ public class MyDeviceInfoFragment extends DashboardFragment
     public void onStart() {
         super.onStart();
         initHeader();
+        initBanner();
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        startBannerAnimation();
     }
 
     @Override
@@ -125,37 +136,67 @@ public class MyDeviceInfoFragment extends DashboardFragment
     }
 
     private void initHeader() {
-        // TODO: Migrate into its own controller.
         final LayoutPreference headerPreference =
                 getPreferenceScreen().findPreference(KEY_MY_DEVICE_INFO_HEADER);
         final boolean shouldDisplayHeader = getContext().getResources().getBoolean(
                 R.bool.config_show_device_header_in_device_info);
-        headerPreference.setVisible(shouldDisplayHeader);
-        if (!shouldDisplayHeader) {
-            return;
+        if (shouldDisplayHeader) {
+            headerPreference.setVisible(false);
         }
-        final View headerView = headerPreference.findViewById(R.id.entity_header);
-        final Activity context = getActivity();
-        final Bundle bundle = getArguments();
-        final EntityHeaderController controller = EntityHeaderController
-                .newInstance(context, this, headerView)
-                .setRecyclerView(getListView(), getSettingsLifecycle())
-                .setButtonActions(EntityHeaderController.ActionType.ACTION_NONE,
-                        EntityHeaderController.ActionType.ACTION_NONE);
+    }
 
-        // TODO: There may be an avatar setting action we can use here.
-        final int iconId = bundle.getInt("icon_id", 0);
-        if (iconId == 0) {
-            final UserManager userManager = (UserManager) getActivity().getSystemService(
-                    Context.USER_SERVICE);
-            final UserInfo info = Utils.getExistingUser(userManager,
-                    android.os.Process.myUserHandle());
-            controller.setLabel(info.name);
-            controller.setIcon(
-                    com.android.settingslib.Utils.getUserIcon(getActivity(), userManager, info));
+    private void initBanner() {
+        LayoutPreference banner = getPreferenceScreen().findPreference("legacy_droid_banner");
+        if (banner == null) return;
+
+        FrameLayout root = banner.findViewById(R.id.legacy_droid_banner);
+        if (root == null) return;
+
+        boolean isNight = (getResources().getConfiguration().uiMode
+                & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
+        if (isNight) {
+            TypedValue tv = new TypedValue();
+            getActivity().getTheme().resolveAttribute(android.R.attr.colorSurface, tv, true);
+            root.setBackgroundColor(tv.data);
+        } else {
+            root.setBackgroundColor(0xFF3e5272);
         }
+    }
 
-        controller.done(context, true /* rebindActions */);
+    private void startBannerAnimation() {
+        LayoutPreference banner = getPreferenceScreen().findPreference("legacy_droid_banner");
+        if (banner == null) return;
+
+        final ImageView icon = banner.findViewById(R.id.banner_icon);
+        final TextView title = banner.findViewById(R.id.banner_title);
+        if (icon == null || title == null) return;
+
+        icon.setAlpha(0f);
+        icon.setScaleX(0f);
+        icon.setScaleY(0f);
+        title.setAlpha(0f);
+
+        AnimatorSet headSet = new AnimatorSet();
+        headSet.playTogether(
+                ObjectAnimator.ofFloat(icon, "alpha", 0f, 1f),
+                ObjectAnimator.ofFloat(icon, "scaleX", 0f, 1f),
+                ObjectAnimator.ofFloat(icon, "scaleY", 0f, 1f));
+        headSet.setDuration(1000);
+
+        ValueAnimator reveal = ValueAnimator.ofFloat(0f, 1f);
+        reveal.addUpdateListener(anim -> {
+            float frac = anim.getAnimatedFraction();
+            int w = title.getWidth();
+            if (w > 0) {
+                title.setClipBounds(new Rect(0, 0, (int) (w * frac), title.getHeight()));
+            }
+            title.setAlpha(frac);
+        });
+        reveal.setDuration(1000);
+
+        AnimatorSet full = new AnimatorSet();
+        full.playSequentially(headSet, reveal);
+        full.start();
     }
 
     @Override
