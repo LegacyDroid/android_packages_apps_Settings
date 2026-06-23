@@ -47,7 +47,7 @@
     <string name="berry_black_theme_summary">Pure black background for dark theme</string>
 
     <!-- Device Info screen. LineageOS legal. -->
-    <string name="lineagelicense_title">LineageOS legal</string>
+    <string name="lineagelicense_title">LegacyDroid legal</string>
 
     <!-- Double tap to sleep on status bar or lockscreen -->
     <string name="status_bar_double_tap_to_sleep_title">Tap to sleep</string>
