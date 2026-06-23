@@ -12270,4 +12270,10 @@
     <string name="legacy_droid_action_dnd">Suppress notifications</string>
     <string name="legacy_droid_action_low_refresh">Lower refresh rate</string>
     <string name="legacy_droid_active_prefix">✓ <xliff:g id="summary">%1$s</xliff:g></string>
+
+    <!-- Firmware version screen: LegacyDroid brand strings -->
+    <string name="legacy_droid_version_title">LegacyDroid version</string>
+    <string name="legacy_droid_api_level_title">LegacyDroid API level</string>
+    <string name="legacy_droid_vendor_security_patch_title">Vendor security patch</string>
+    <string name="legacy_droid_build_date_title">Build date</string>
 </resources>

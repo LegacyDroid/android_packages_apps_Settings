@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
      Copyright (C) 2012-2016 The CyanogenMod Project
-     Copyright (C) 2017-2021 The LineageOS Project
+     Copyright (C) 2017-2021 The LegacyDroid Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="lineagelicense_title">LineageOS 法律條款</string>
+    <string name="lineagelicense_title">LegacyDroid 法律條款</string>
     <string name="high_touch_sensitivity_title">高觸碰靈敏度</string>
     <string name="high_touch_sensitivity_summary">增加觸控螢幕的靈敏度，戴著手套也可以使用手機</string>
     <string name="increasing_ring_ramp_up_time_title">漸強時間</string>

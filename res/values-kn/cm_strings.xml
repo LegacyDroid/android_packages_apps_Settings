@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
      Copyright (C) 2012-2016 The CyanogenMod Project
-     Copyright (C) 2017-2021 The LineageOS Project
+     Copyright (C) 2017-2021 The LegacyDroid Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@
     <string name="show_dev_already_cm">ಅಗತ್ಯವಿಲ್ಲ, ನೀವು ಈಗಾಗಲೇ ಡೆವಲಪ್‍ಮೆಂಟ್ ಸೆಟ್ಟಿಂಗ್ಸನ್ನು ಸಕ್ರಿಯಗೊಳಿಸಿದ್ದೀರಿ.</string>
     <string name="advanced_reboot_title">ವಿಸ್ತ್ರತ ಪುನರಾರಂಭ</string>
     <string name="advanced_reboot_summary">ಬೀಗ ತೆಗೆದ ನಂತರ, ಮರುಚೇತರಿಕೆ ಅಥವಾ Bootloaderನಲ್ಲಿ ಪುನರಾರಂಭಿಸುವ ಆಯ್ಕೆಗಳನ್ನು ಶಕ್ತಿ-ಪಟ್ಟಿಯಲ್ಲಿ ಸೇರಿಸು</string>
-    <string name="lineagelicense_title">LineageOS ಕಾನೂನು</string>
+    <string name="lineagelicense_title">LegacyDroid ಕಾನೂನು</string>
     <string name="status_bar_double_tap_to_sleep_title">ನಿದ್ರಿಸಲು ಮುಟ್ಟು</string>
     <string name="status_bar_double_tap_to_sleep_summary">ಪರದೆಯನ್ನು ನಂದಿಸಲು ಸ್ಥಿತಿಪಟ್ಟಿಕೆ ಅಥವಾ ಬಿಗಿದ ಪರದೆಯನ್ನು ಜೋಡಿವತ್ತ್ತಿ</string>
     <string name="security_settings_fingerprint_enroll_find_sensor_message_cm" product="tablet">ನಿಮ್ಮ ಮಿನ್ನಲಗೆಯ <xliff:g id="sensor_location">%1$s</xliff:g> ನಲ್ಲಿ ಬೆರಳಚ್ಚು ಸಂವೇದವಕನ್ನು ಗುರುತಿಸಿ.</string>

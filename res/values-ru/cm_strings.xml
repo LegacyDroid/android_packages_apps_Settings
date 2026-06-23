@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
      Copyright (C) 2012-2016 The CyanogenMod Project
-     Copyright (C) 2017-2021 The LineageOS Project
+     Copyright (C) 2017-2021 The LegacyDroid Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@
     <string name="adb_enable_summary_root">Разрешить запуск отладки Android с правами суперпользователя</string>
     <string name="berry_black_theme_title">Натурально черный</string>
     <string name="berry_black_theme_summary">Натурально черный фон для темной темы</string>
-    <string name="lineagelicense_title">Политика конфиденциальности LineageOS</string>
+    <string name="lineagelicense_title">Политика конфиденциальности LegacyDroid</string>
     <string name="status_bar_double_tap_to_sleep_title">Коснитесь для сна</string>
     <string name="status_bar_double_tap_to_sleep_summary">Дважды коснитесь строки состояния или экрана блокировки, чтобы перевести устройство в спящий режим</string>
     <string name="security_settings_fingerprint_enroll_find_sensor_message_cm" product="tablet">Сканер отпечатков пальцев расположен на <xliff:g id="sensor_location">%1$s</xliff:g> вашего планшета.</string>

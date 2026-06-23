@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
      Copyright (C) 2012-2016 The CyanogenMod Project
-     Copyright (C) 2017-2021 The LineageOS Project
+     Copyright (C) 2017-2021 The LegacyDroid Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@
     <string name="show_dev_on_cm">Du har aktivert innstillinger for utviklere!</string>
     <string name="show_dev_already_cm">Ikke nødvendig, du allerede har aktivert utviklingsinnstillinger.</string>
     <string name="advanced_reboot_title">Avansert omstart</string>
-    <string name="lineagelicense_title">LineageOS juridisk</string>
+    <string name="lineagelicense_title">LegacyDroid juridisk</string>
     <string name="security_settings_fingerprint_enroll_find_sensor_message_cm" product="default">Finn fingerskanneren på <xliff:g id="sensor_location">%1$s</xliff:g> av telefonen din.</string>
     <string name="security_settings_fingerprint_sensor_location_back">baksiden</string>
     <string name="security_settings_fingerprint_sensor_location_front">forsiden</string>

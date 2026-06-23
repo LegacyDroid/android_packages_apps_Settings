@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
      Copyright (C) 2012-2016 The CyanogenMod Project
-     Copyright (C) 2017-2021 The LineageOS Project
+     Copyright (C) 2017-2021 The LegacyDroid Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@
     <string name="adb_enable_summary_root">Разрешете отстраняване на грешки в Android с права на суперпотребител</string>
     <string name="berry_black_theme_title">Натурално черно</string>
     <string name="berry_black_theme_summary">Натурален черен фон за тъмна тема</string>
-    <string name="lineagelicense_title">LineageOS правна информация</string>
+    <string name="lineagelicense_title">LegacyDroid правна информация</string>
     <string name="status_bar_double_tap_to_sleep_title">Натиснете, за заспиване</string>
     <string name="status_bar_double_tap_to_sleep_summary">Докоснете двукратно лентата на състоянието или заключващия екран, за да изключите дисплея</string>
     <string name="security_settings_fingerprint_enroll_find_sensor_message_cm" product="tablet">Намерете сензора за пръстови отпечатъци <xliff:g id="sensor_location">%1$s </xliff:g> на вашия таблет.</string>

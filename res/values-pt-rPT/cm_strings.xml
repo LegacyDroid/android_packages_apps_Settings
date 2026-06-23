@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
      Copyright (C) 2012-2016 The CyanogenMod Project
-     Copyright (C) 2017-2021 The LineageOS Project
+     Copyright (C) 2017-2021 The LegacyDroid Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@
     <string name="adb_enable_summary_root">Permitir a execução da depuração Android como root</string>
     <string name="berry_black_theme_title">Preto puro</string>
     <string name="berry_black_theme_summary">Fundo em preto puro para tema escuro</string>
-    <string name="lineagelicense_title">Licença LineageOS</string>
+    <string name="lineagelicense_title">Licença LegacyDroid</string>
     <string name="status_bar_double_tap_to_sleep_title">Toque duplo para desligar o ecrã</string>
     <string name="status_bar_double_tap_to_sleep_summary">Dê um toque duplo na barra de estado ou ecrã de bloqueio para desligar o ecrã</string>
     <string name="security_settings_fingerprint_enroll_find_sensor_message_cm" product="tablet">Localize o sensor de impressões digitais na <xliff:g id="sensor_location">%1$s</xliff:g> do seu tablet.</string>

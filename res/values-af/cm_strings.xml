@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
      Copyright (C) 2012-2016 The CyanogenMod Project
-     Copyright (C) 2017-2021 The LineageOS Project
+     Copyright (C) 2017-2021 The LegacyDroid Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@
     <string name="show_dev_on_cm">Jy het die ontwikkeling opsies geaktiveer!</string>
     <string name="show_dev_already_cm">Nie nodig, het jy reeds die ontwikkeling opsies geaktiveer.</string>
     <string name="advanced_reboot_title">Gevorderde herlaai</string>
-    <string name="lineagelicense_title">LineageOS Regs</string>
+    <string name="lineagelicense_title">LegacyDroid Regs</string>
     <string name="security_settings_fingerprint_enroll_find_sensor_message_cm" product="default">Vind die vingerafdruk sensor op die <xliff:g id="sensor_location">%1$s </xliff:g> van jou foon.</string>
     <string name="security_settings_fingerprint_sensor_location_back">terug</string>
     <string name="security_settings_fingerprint_sensor_location_front">voorkant</string>

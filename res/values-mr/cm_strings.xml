@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
      Copyright (C) 2012-2016 The CyanogenMod Project
-     Copyright (C) 2017-2021 The LineageOS Project
+     Copyright (C) 2017-2021 The LegacyDroid Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@
     </plurals>
     <string name="show_dev_on_cm">तुम्ही विकास सेटिंग्ज सक्षम केली आहेत!</string>
     <string name="show_dev_already_cm">गरज नाही, तुम्ही आधीच विकास सेटिंग्ज सक्षम केली आहेत.</string>
-    <string name="lineagelicense_title">LineageOS लिगल</string>
+    <string name="lineagelicense_title">LegacyDroid लिगल</string>
     <string name="high_touch_sensitivity_title">उच्च स्पर्श संवेदनक्षमता</string>
     <string name="high_touch_sensitivity_summary">टचस्क्रीन संवेदनक्षमता वाढवा म्हणजे ग्लोव्ज घातलेले असताना ती वापरता येईल</string>
     <string name="increasing_ring_volume_option_title">रिंग ध्वनी वाढवणे</string>

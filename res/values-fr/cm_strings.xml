@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
      Copyright (C) 2012-2016 The CyanogenMod Project
-     Copyright (C) 2017-2021 The LineageOS Project
+     Copyright (C) 2017-2021 The LegacyDroid Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ Vous êtes maintenant à <xliff:g id="step_count">%1$d</xliff:g> étapes de l\'a
     <string name="adb_enable_summary_root">Autoriser le débogage Android en tant que root</string>
     <string name="berry_black_theme_title">Noir pur</string>
     <string name="berry_black_theme_summary">Fond noir pur pour le thème sombre</string>
-    <string name="lineagelicense_title">Infos légales LineageOS</string>
+    <string name="lineagelicense_title">Infos légales LegacyDroid</string>
     <string name="status_bar_double_tap_to_sleep_title">Appuyer pour mettre en veille</string>
     <string name="status_bar_double_tap_to_sleep_summary">Appuyer deux fois sur la barre d\'état ou sur l\'écran de verrouillage pour éteindre l\'écran</string>
     <string name="security_settings_fingerprint_enroll_find_sensor_message_cm" product="tablet">Localisez le capteur d\'empreintes digitales sur le <xliff:g id="sensor_location">%1$s</xliff:g> de votre tablette.</string>

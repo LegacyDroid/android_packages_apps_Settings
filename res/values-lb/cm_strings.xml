@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
      Copyright (C) 2012-2016 The CyanogenMod Project
-     Copyright (C) 2017-2021 The LineageOS Project
+     Copyright (C) 2017-2021 The LegacyDroid Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@
     </plurals>
     <string name="show_dev_on_cm">Du hues d\'Entwéckleroptiounen aktivéiert!</string>
     <string name="show_dev_already_cm">Net néideg, du hues d\'Entwécklungsoptioune schonn aktivéiert.</string>
-    <string name="lineagelicense_title">Rechtlech Hiweiser iwwer LineageOS</string>
+    <string name="lineagelicense_title">Rechtlech Hiweiser iwwer LegacyDroid</string>
     <string name="high_touch_sensitivity_title">Héich Beréierungsempfindlechkeet</string>
     <string name="high_touch_sensitivity_summary">Touch-Empfindlechkeet erhéijen, fir den Touchscreen och mat Hännsche benotzen ze kënnen</string>
     <string name="increasing_ring_volume_option_title">Usteigend Schelltounlautstäerkt</string>

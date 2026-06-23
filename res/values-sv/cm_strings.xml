@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
      Copyright (C) 2012-2016 The CyanogenMod Project
-     Copyright (C) 2017-2021 The LineageOS Project
+     Copyright (C) 2017-2021 The LegacyDroid Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@
     <string name="advanced_reboot_title">Avancerad omstart</string>
     <string name="berry_black_theme_title">Helsvart</string>
     <string name="berry_black_theme_summary">Helsvart bakgrund för mörkt tema</string>
-    <string name="lineagelicense_title">LineageOS Juridik</string>
+    <string name="lineagelicense_title">LegacyDroid Juridik</string>
     <string name="status_bar_double_tap_to_sleep_title">Dubbeltryck för att släcka skärmen</string>
     <string name="security_settings_fingerprint_sensor_location_back">bakre</string>
     <string name="security_settings_fingerprint_sensor_location_front">främre</string>
