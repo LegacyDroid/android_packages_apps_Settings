@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:key="legacy_droid_settings"
     android:title="@string/legacy_droid_settings_title">
 
-    <Preference
+    <PreferenceCategory
         android:key="category_performance_battery"
         android:title="@string/legacy_droid_category_performance_battery"
-        android:selectable="false" />
+        app:iconSpaceReserved="true">
 
         <com.android.settings.legacydroid.ProfilePreference
             android:key="profile_balance"
@@ -27,5 +28,7 @@
         <com.android.settings.legacydroid.BatteryStatusPreference
             android:key="battery_status"
             android:selectable="false" />
+
+    </PreferenceCategory>
 
 </PreferenceScreen>
