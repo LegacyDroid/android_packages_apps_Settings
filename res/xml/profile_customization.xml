@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="profile_customization">
+
+    <PreferenceCategory
+        android:key="category_actions"
+        android:title="@string/legacy_droid_customization_actions">
+
+        <SwitchPreference
+            android:key="action_stop_apps"
+            android:title="@string/legacy_droid_action_stop_apps"
+            android:defaultValue="true" />
+
+        <SwitchPreference
+            android:key="action_pause_sync"
+            android:title="@string/legacy_droid_action_pause_sync"
+            android:defaultValue="true" />
+
+        <SwitchPreference
+            android:key="action_high_refresh"
+            android:title="@string/legacy_droid_action_high_refresh"
+            android:defaultValue="true" />
+
+        <SwitchPreference
+            android:key="action_game_driver"
+            android:title="@string/legacy_droid_action_game_driver"
+            android:defaultValue="true" />
+
+        <SwitchPreference
+            android:key="action_dnd"
+            android:title="@string/legacy_droid_action_dnd"
+            android:defaultValue="true" />
+
+        <SwitchPreference
+            android:key="action_low_refresh"
+            android:title="@string/legacy_droid_action_low_refresh"
+            android:defaultValue="true" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

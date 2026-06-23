@@ -56,6 +56,14 @@
         settings:controller="com.android.settings.fuelgauge.TopLevelBatteryPreferenceController"/>
 
     <Preference
+        android:key="top_level_legacy_droid"
+        android:title="@string/legacy_droid_settings_title"
+        android:summary="@string/summary_placeholder"
+        android:icon="@drawable/ic_homepage_battery"
+        android:order="-85"
+        android:fragment="com.android.settings.legacydroid.LegacyDroidSettings"/>
+
+    <Preference
         android:key="top_level_display"
         android:title="@string/display_settings"
         android:summary="@string/summary_placeholder"

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="legacy_droid_profile_entries">
+        <item>@string/legacy_droid_profile_balance</item>
+        <item>@string/legacy_droid_profile_performance</item>
+        <item>@string/legacy_droid_profile_battery_saver</item>
+    </string-array>
+    <string-array name="legacy_droid_profile_values">
+        <item>balance</item>
+        <item>performance</item>
+        <item>battery_saver</item>
+    </string-array>
+</resources>

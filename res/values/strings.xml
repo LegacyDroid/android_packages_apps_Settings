@@ -12243,4 +12243,30 @@
     <string name="bluetooth_connect_access_dialog_negative">Don\u2019t connect</string>
     <!-- Strings for Dialog connect button -->
     <string name="bluetooth_connect_access_dialog_positive">Connect</string>
+    <!-- LegacyDroid Settings -->
+    <string name="legacy_droid_settings_title">LegacyDroid Setting</string>
+    <string name="legacy_droid_category_performance_battery">Performance &amp; Battery</string>
+    <string name="legacy_droid_profile_title">Choose Profile</string>
+    <string name="legacy_droid_profile_balance">Balance</string>
+    <string name="legacy_droid_profile_performance">Performance</string>
+    <string name="legacy_droid_profile_battery_saver">Battery Saver</string>
+    <string name="legacy_droid_cpu_temp">CPU Temp: <xliff:g id="temp">%1$s</xliff:g></string>
+    <string name="legacy_droid_battery_temp">Battery Temp: <xliff:g id="temp">%1$s</xliff:g></string>
+    <string name="legacy_droid_cpu_label">CPU: <xliff:g id="name">%1$s</xliff:g></string>
+    <string name="legacy_droid_gpu_label">GPU: <xliff:g id="name">%1$s</xliff:g></string>
+    <string name="legacy_droid_charging">Charging</string>
+    <string name="legacy_droid_profile_applied">Profile set to %1$s</string>
+    <string name="legacy_droid_unknown">Unknown</string>
+    <string name="legacy_droid_temp_format"><xliff:g id="value">%1$s</xliff:g>°C</string>
+    <string name="legacy_droid_summary_balance">Normal Android behavior</string>
+    <string name="legacy_droid_summary_performance">Maximum performance</string>
+    <string name="legacy_droid_summary_battery_saver">Save battery</string>
+    <string name="legacy_droid_customization_actions">Actions</string>
+    <string name="legacy_droid_action_stop_apps">Force stop background apps</string>
+    <string name="legacy_droid_action_pause_sync">Pause background sync</string>
+    <string name="legacy_droid_action_high_refresh">High refresh rate</string>
+    <string name="legacy_droid_action_game_driver">Game driver</string>
+    <string name="legacy_droid_action_dnd">Suppress notifications</string>
+    <string name="legacy_droid_action_low_refresh">Lower refresh rate</string>
+    <string name="legacy_droid_active_prefix">✓ <xliff:g id="summary">%1$s</xliff:g></string>
 </resources>
