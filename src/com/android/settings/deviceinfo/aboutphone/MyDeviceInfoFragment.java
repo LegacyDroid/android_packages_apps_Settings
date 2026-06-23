@@ -156,7 +156,7 @@ public class MyDeviceInfoFragment extends DashboardFragment
                 & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES;
         if (isNight) {
             TypedValue tv = new TypedValue();
-            getActivity().getTheme().resolveAttribute(android.R.attr.colorSurface, tv, true);
+            getActivity().getTheme().resolveAttribute(android.R.attr.colorBackground, tv, true);
             root.setBackgroundColor(tv.data);
         } else {
             root.setBackgroundColor(0xFF3e5272);
