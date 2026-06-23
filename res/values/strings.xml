@@ -4437,6 +4437,7 @@
     <!-- TODO: Remove it once the same entry in SettingsLib is translated. -->
     <!-- Manage apps, individual app screen, substituted for the application's label when the app's label CAN NOT be determined.-->
     <string name="unknown">Unknown</string>
+    <string name="maintainer">Maintainer</string>
     <!-- [CHAR LIMIT=25] Manage applications screen, menu item.  Sorts all of the apps in the list alphabetically. -->
     <string name="sort_order_alpha">Sort by name</string>
     <!-- Manage applications screen, menu item. Sorts all of the apps in the list based on their file size.  This is used to uninstall when space is getting low. -->
