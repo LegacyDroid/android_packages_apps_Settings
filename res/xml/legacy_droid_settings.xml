@@ -4,9 +4,10 @@
     android:key="legacy_droid_settings"
     android:title="@string/legacy_droid_settings_title">
 
-    <PreferenceCategory
+    <Preference
         android:key="category_performance_battery"
-        android:title="@string/legacy_droid_category_performance_battery">
+        android:title="@string/legacy_droid_category_performance_battery"
+        android:selectable="false" />
 
         <com.android.settings.legacydroid.ProfilePreference
             android:key="profile_balance"
@@ -26,7 +27,5 @@
         <com.android.settings.legacydroid.BatteryStatusPreference
             android:key="battery_status"
             android:selectable="false" />
-
-    </PreferenceCategory>
 
 </PreferenceScreen>
