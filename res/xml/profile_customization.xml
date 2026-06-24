@@ -37,6 +37,16 @@
             android:title="@string/legacy_droid_action_low_refresh"
             android:defaultValue="true" />
 
+        <SwitchPreference
+            android:key="action_disable_anim"
+            android:title="@string/legacy_droid_action_disable_anim"
+            android:defaultValue="true" />
+
+        <SwitchPreference
+            android:key="action_battery_saver"
+            android:title="@string/legacy_droid_action_battery_saver"
+            android:defaultValue="false" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>

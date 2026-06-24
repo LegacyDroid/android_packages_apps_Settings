@@ -19,6 +19,7 @@ public class ProfileCustomizationFragment extends DashboardFragment {
 
     private static final String TAG = "ProfileCustomization";
     private static final String ARG_PROFILE = "profile";
+    private static final String ARG_ACTIVE_PROFILE = "active_profile";
     private static final String PREFS_NAME = "legacy_droid_customization";
 
     @Override
@@ -52,6 +53,7 @@ public class ProfileCustomizationFragment extends DashboardFragment {
 
         Bundle args = getArguments();
         String profile = args != null ? args.getString(ARG_PROFILE, "performance") : "performance";
+        String activeProfile = args != null ? args.getString(ARG_ACTIVE_PROFILE, "") : "";
 
         String titleKey = "legacy_droid_profile_" + profile;
         int titleResId = getResources().getIdentifier(titleKey, "string",
@@ -68,25 +70,36 @@ public class ProfileCustomizationFragment extends DashboardFragment {
                 "action_high_refresh",
                 "action_game_driver",
                 "action_dnd",
-                "action_low_refresh"
+                "action_low_refresh",
+                "action_disable_anim",
+                "action_battery_saver"
         };
 
         for (String key : actionKeys) {
             SwitchPreference sp = findPreference(key);
             if (sp != null) {
-                boolean saved = prefs.getBoolean(profile + "_" + key, sp.isChecked());
+                boolean defaultValue = getActionDefault(profile, key);
+                boolean saved = prefs.getBoolean(profile + "_" + key, defaultValue);
                 sp.setChecked(saved);
                 sp.setOnPreferenceChangeListener((preference, newValue) -> {
                     prefs.edit().putBoolean(profile + "_" + key, (Boolean) newValue).apply();
+                    if (profile.equals(activeProfile)) {
+                        LegacyDroidSettings.applyAction(getContext(), key, (Boolean) newValue);
+                    }
                     return true;
                 });
             }
         }
     }
 
-    public static Bundle createArgs(String profile) {
+    private boolean getActionDefault(String profile, String action) {
+        return LegacyDroidSettings.getActionDefault(profile, action);
+    }
+
+    public static Bundle createArgs(String profile, String activeProfile) {
         Bundle args = new Bundle();
         args.putString(ARG_PROFILE, profile);
+        args.putString(ARG_ACTIVE_PROFILE, activeProfile);
         return args;
     }
 }

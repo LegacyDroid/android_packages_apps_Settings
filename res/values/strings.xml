@@ -12269,6 +12269,8 @@
     <string name="legacy_droid_action_game_driver">Game driver</string>
     <string name="legacy_droid_action_dnd">Suppress notifications</string>
     <string name="legacy_droid_action_low_refresh">Lower refresh rate</string>
+    <string name="legacy_droid_action_disable_anim">Remove animations</string>
+    <string name="legacy_droid_action_battery_saver">Battery Saver mode</string>
     <string name="legacy_droid_active_prefix">✓ <xliff:g id="summary">%1$s</xliff:g></string>
 
     <!-- Firmware version screen: LegacyDroid brand strings -->

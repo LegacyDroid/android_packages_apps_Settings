@@ -107,7 +107,7 @@ public class LegacyDroidSettings extends DashboardFragment {
         pref.setGearClickListener(v -> {
             new SubSettingLauncher(getContext())
                     .setDestination(ProfileCustomizationFragment.class.getName())
-                    .setArguments(ProfileCustomizationFragment.createArgs(profileName))
+                    .setArguments(ProfileCustomizationFragment.createArgs(profileName, mActiveProfile))
                     .setTitleRes(getTitleResForProfile(profileName))
                     .setSourceMetricsCategory(getMetricsCategory())
                     .launch();
@@ -143,74 +143,124 @@ public class LegacyDroidSettings extends DashboardFragment {
     }
 
     private void applyProfile(String profile) {
-        SharedPreferences custom = getContext().getSharedPreferences(PREFS_CUSTOM, 0);
+        Context context = getContext();
+        SharedPreferences custom = context.getSharedPreferences(PREFS_CUSTOM, 0);
 
-        switch (profile) {
-            case "performance":
-                BatterySaverUtils.setPowerSaveMode(getContext(), false, false);
-                if (custom.getBoolean(profile + "_action_stop_apps", true)) stopBackgroundApps();
-                if (custom.getBoolean(profile + "_action_pause_sync", true)) setMasterSync(false);
-                if (custom.getBoolean(profile + "_action_high_refresh", true)) setHighRefreshRate();
-                if (custom.getBoolean(profile + "_action_game_driver", true)) setGameDriver(true);
-                if (custom.getBoolean(profile + "_action_dnd", true)) setDnd(true);
-                setAnimationScales(0f);
-                break;
+        BatterySaverUtils.setPowerSaveMode(context, false, false);
+        setMasterSync(true);
+        resetRefreshRate(context);
+        setGameDriver(context, false);
+        setDnd(context, false);
+        setAnimationScales(context, 1f);
 
-            case "battery_saver":
-                BatterySaverUtils.setPowerSaveMode(getContext(), true, false);
-                if (custom.getBoolean(profile + "_action_low_refresh", true)) setLowRefreshRate();
-                setMasterSync(true);
-                setGameDriver(false);
-                setDnd(false);
-                setAnimationScales(0f);
-                break;
+        if (isActionEnabled(custom, profile, "action_stop_apps")) stopBackgroundApps(context);
+        if (isActionEnabled(custom, profile, "action_pause_sync")) setMasterSync(false);
+        if (isActionEnabled(custom, profile, "action_high_refresh")) setHighRefreshRate(context);
+        if (isActionEnabled(custom, profile, "action_game_driver")) setGameDriver(context, true);
+        if (isActionEnabled(custom, profile, "action_dnd")) setDnd(context, true);
+        if (isActionEnabled(custom, profile, "action_low_refresh")) setLowRefreshRate(context);
+        if (isActionEnabled(custom, profile, "action_disable_anim")) setAnimationScales(context, 0f);
+        if (isActionEnabled(custom, profile, "action_battery_saver"))
+            BatterySaverUtils.setPowerSaveMode(context, true, false);
 
-            case "balance":
-            default:
-                BatterySaverUtils.setPowerSaveMode(getContext(), false, false);
-                setMasterSync(true);
-                resetRefreshRate();
-                setGameDriver(false);
-                setDnd(false);
-                setAnimationScales(1f);
-                break;
-        }
-
-        Toast.makeText(getContext(),
+        Toast.makeText(context,
                 getString(R.string.legacy_droid_profile_applied,
                         getString(getTitleResForProfile(profile))),
                 Toast.LENGTH_SHORT).show();
     }
 
-    private void setAnimationScales(float scale) {
+    public static void applyAction(Context context, String action, boolean enable) {
+        if (enable) {
+            switch (action) {
+                case "action_stop_apps": stopBackgroundApps(context); break;
+                case "action_pause_sync": setMasterSync(false); break;
+                case "action_high_refresh": setHighRefreshRate(context); break;
+                case "action_game_driver": setGameDriver(context, true); break;
+                case "action_dnd": setDnd(context, true); break;
+                case "action_low_refresh": setLowRefreshRate(context); break;
+                case "action_disable_anim": setAnimationScales(context, 0f); break;
+                case "action_battery_saver":
+                    BatterySaverUtils.setPowerSaveMode(context, true, false); break;
+            }
+        } else {
+            switch (action) {
+                case "action_pause_sync": setMasterSync(true); break;
+                case "action_high_refresh":
+                case "action_low_refresh": resetRefreshRate(context); break;
+                case "action_game_driver": setGameDriver(context, false); break;
+                case "action_dnd": setDnd(context, false); break;
+                case "action_disable_anim": setAnimationScales(context, 1f); break;
+                case "action_battery_saver":
+                    BatterySaverUtils.setPowerSaveMode(context, false, false); break;
+                case "action_stop_apps": break;
+            }
+        }
+    }
+
+    private boolean isActionEnabled(SharedPreferences prefs, String profile, String action) {
+        return prefs.getBoolean(profile + "_" + action, getActionDefault(profile, action));
+    }
+
+    public static boolean getActionDefault(String profile, String action) {
+        switch (profile) {
+            case "performance":
+                switch (action) {
+                    case "action_stop_apps":
+                    case "action_pause_sync":
+                    case "action_high_refresh":
+                    case "action_game_driver":
+                    case "action_dnd":
+                    case "action_disable_anim":
+                        return true;
+                    case "action_battery_saver":
+                        return false;
+                    default:
+                        return false;
+                }
+            case "battery_saver":
+                switch (action) {
+                    case "action_pause_sync":
+                    case "action_low_refresh":
+                    case "action_dnd":
+                    case "action_disable_anim":
+                    case "action_battery_saver":
+                        return true;
+                    default:
+                        return false;
+                }
+            default:
+                return false;
+        }
+    }
+
+    private static void setAnimationScales(Context context, float scale) {
         try {
-            Settings.Global.putFloat(getContentResolver(), ANIM_WINDOW, scale);
-            Settings.Global.putFloat(getContentResolver(), ANIM_TRANSITION, scale);
-            Settings.Global.putFloat(getContentResolver(), ANIM_ANIMATOR, scale);
+            ContentResolver cr = context.getContentResolver();
+            Settings.Global.putFloat(cr, ANIM_WINDOW, scale);
+            Settings.Global.putFloat(cr, ANIM_TRANSITION, scale);
+            Settings.Global.putFloat(cr, ANIM_ANIMATOR, scale);
         } catch (Exception ignored) {}
     }
 
-    private void stopBackgroundApps() {
-        Context ctx = getContext();
-        if (ctx == null) return;
-        ActivityManager am = (ActivityManager) ctx.getSystemService(Context.ACTIVITY_SERVICE);
-        PackageManager pm = ctx.getPackageManager();
+    private static void stopBackgroundApps(Context context) {
+        ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+        PackageManager pm = context.getPackageManager();
         List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
         if (packages == null) return;
         for (ApplicationInfo app : packages) {
             if ((app.flags & ApplicationInfo.FLAG_SYSTEM) == 0
-                    && !app.packageName.equals(ctx.getPackageName())) {
+                    && !app.packageName.equals(context.getPackageName())) {
                 try { am.forceStopPackage(app.packageName); } catch (Exception ignored) {}
             }
         }
     }
 
-    private void setMasterSync(boolean enabled) {
+    private static void setMasterSync(boolean enabled) {
         ContentResolver.setMasterSyncAutomatically(enabled);
     }
 
-    private float getMaxRefreshRate() {
-        WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+    private static float getMaxRefreshRate(Context context) {
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         if (wm == null) return 60f;
         float max = 60f;
         for (Display.Mode mode : wm.getDefaultDisplay().getSupportedModes()) {
@@ -219,8 +269,8 @@ public class LegacyDroidSettings extends DashboardFragment {
         return max;
     }
 
-    private float getMinRefreshRate() {
-        WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+    private static float getMinRefreshRate(Context context) {
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         if (wm == null) return 60f;
         float min = Float.MAX_VALUE;
         for (Display.Mode mode : wm.getDefaultDisplay().getSupportedModes()) {
@@ -229,40 +279,43 @@ public class LegacyDroidSettings extends DashboardFragment {
         return min < Float.MAX_VALUE ? min : 60f;
     }
 
-    private void setHighRefreshRate() {
+    private static void setHighRefreshRate(Context context) {
         try {
-            float rate = getMaxRefreshRate();
-            Settings.System.putFloat(getContentResolver(), Settings.System.MIN_REFRESH_RATE, rate);
-            Settings.System.putFloat(getContentResolver(), Settings.System.PEAK_REFRESH_RATE, rate);
+            ContentResolver cr = context.getContentResolver();
+            float rate = getMaxRefreshRate(context);
+            Settings.System.putFloat(cr, Settings.System.MIN_REFRESH_RATE, rate);
+            Settings.System.putFloat(cr, Settings.System.PEAK_REFRESH_RATE, rate);
         } catch (Exception ignored) {}
     }
 
-    private void setLowRefreshRate() {
+    private static void setLowRefreshRate(Context context) {
         try {
-            float rate = getMinRefreshRate();
-            Settings.System.putFloat(getContentResolver(), Settings.System.MIN_REFRESH_RATE, rate);
-            Settings.System.putFloat(getContentResolver(), Settings.System.PEAK_REFRESH_RATE, rate);
+            ContentResolver cr = context.getContentResolver();
+            float rate = getMinRefreshRate(context);
+            Settings.System.putFloat(cr, Settings.System.MIN_REFRESH_RATE, rate);
+            Settings.System.putFloat(cr, Settings.System.PEAK_REFRESH_RATE, rate);
         } catch (Exception ignored) {}
     }
 
-    private void resetRefreshRate() {
+    private static void resetRefreshRate(Context context) {
         try {
-            Settings.System.putFloat(getContentResolver(), Settings.System.MIN_REFRESH_RATE, 60f);
-            Settings.System.putFloat(getContentResolver(), Settings.System.PEAK_REFRESH_RATE, 60f);
+            ContentResolver cr = context.getContentResolver();
+            Settings.System.putFloat(cr, Settings.System.MIN_REFRESH_RATE, 60f);
+            Settings.System.putFloat(cr, Settings.System.PEAK_REFRESH_RATE, 60f);
         } catch (Exception ignored) {}
     }
 
-    private void setGameDriver(boolean enabled) {
+    private static void setGameDriver(Context context, boolean enabled) {
         try {
-            Settings.Global.putString(getContentResolver(),
+            Settings.Global.putString(context.getContentResolver(),
                     KEY_UPDATABLE_DRIVER, enabled ? "1" : "0");
         } catch (Exception ignored) {}
     }
 
-    private void setDnd(boolean on) {
+    private static void setDnd(Context context, boolean on) {
         try {
             NotificationManager nm = (NotificationManager)
-                    getContext().getSystemService(Context.NOTIFICATION_SERVICE);
+                    context.getSystemService(Context.NOTIFICATION_SERVICE);
             if (nm == null) return;
             try {
                 nm.setInterruptionFilter(on
