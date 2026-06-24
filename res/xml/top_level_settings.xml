@@ -59,7 +59,7 @@
         android:key="top_level_legacy_droid"
         android:title="@string/legacy_droid_settings_title"
         android:summary="@string/summary_placeholder"
-        android:icon="@drawable/ic_android"
+        android:icon="@drawable/ic_homepage_legacy_droid"
         android:order="-85"
         android:fragment="com.android.settings.legacydroid.LegacyDroidSettings"
         settings:controller="com.android.settings.legacydroid.LegacyDroidTopLevelController"/>
