@@ -82,7 +82,9 @@ public class BatteryCircleView extends View {
     public void setPercent(float percent, boolean isCharging) {
         mTargetPercent = Math.max(0, Math.min(100, percent));
         mIsCharging = isCharging;
-        mPercentText = (int) mTargetPercent + "%";
+        java.text.NumberFormat nf = java.text.NumberFormat.getPercentInstance();
+        nf.setMinimumFractionDigits(0);
+        mPercentText = nf.format(mTargetPercent / 100.0);
         startAnimation();
     }
 

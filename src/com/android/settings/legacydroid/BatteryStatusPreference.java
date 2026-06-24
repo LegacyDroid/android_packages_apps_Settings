@@ -92,7 +92,8 @@ public class BatteryStatusPreference extends Preference {
         }
         if (mBatteryTempText != null) {
             Context ctx = getContext();
-            String tempStr = String.format("%.1f°C", batteryTempC);
+            String tempStr = ctx.getString(R.string.legacy_droid_temp_format,
+                    String.format(java.util.Locale.US, "%.1f", batteryTempC));
             mBatteryTempText.setText(ctx.getString(R.string.legacy_droid_battery_temp, tempStr));
         }
     }
