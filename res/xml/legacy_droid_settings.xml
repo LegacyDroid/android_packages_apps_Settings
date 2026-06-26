@@ -5,33 +5,18 @@
     android:key="legacy_droid_settings"
     android:title="@string/legacy_droid_settings_title">
 
-    <PreferenceCategory
-        android:key="category_performance_battery"
+    <Preference
+        android:key="performance_battery"
         android:title="@string/legacy_droid_category_performance_battery"
-        app:iconSpaceReserved="false">
+        android:summary="@string/legacy_droid_performance_battery_summary"
+        app:iconSpaceReserved="false"
+        android:fragment="com.android.settings.legacydroid.PerformanceBatterySettings" />
 
-        <com.android.settings.legacydroid.ProfilePreference
-            android:key="profile_balance"
-            android:title="@string/legacy_droid_profile_balance"
-            android:summary="@string/legacy_droid_summary_balance"
-            app:iconSpaceReserved="false" />
-
-        <com.android.settings.legacydroid.ProfilePreference
-            android:key="profile_performance"
-            android:title="@string/legacy_droid_profile_performance"
-            android:summary="@string/legacy_droid_summary_performance"
-            app:iconSpaceReserved="false" />
-
-        <com.android.settings.legacydroid.ProfilePreference
-            android:key="profile_battery_saver"
-            android:title="@string/legacy_droid_profile_battery_saver"
-            android:summary="@string/legacy_droid_summary_battery_saver"
-            app:iconSpaceReserved="false" />
-
-        <com.android.settings.legacydroid.BatteryStatusPreference
-            android:key="battery_status"
-            android:selectable="false" />
-
-    </PreferenceCategory>
+    <Preference
+        android:key="legacy_dex"
+        android:title="@string/legacy_droid_category_legacy_dex"
+        android:summary="@string/legacy_droid_legacy_dex_summary"
+        app:iconSpaceReserved="false"
+        android:fragment="com.android.settings.legacydroid.LegacyDexSettings" />
 
 </PreferenceScreen>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:key="performance_battery"
+    android:title="@string/legacy_droid_category_performance_battery">
+
+    <PreferenceCategory
+        android:key="category_performance_battery"
+        android:title="@string/legacy_droid_profile_title"
+        app:iconSpaceReserved="false">
+
+        <com.android.settings.legacydroid.ProfilePreference
+            android:key="profile_balance"
+            android:title="@string/legacy_droid_profile_balance"
+            android:summary="@string/legacy_droid_summary_balance"
+            app:iconSpaceReserved="false" />
+
+        <com.android.settings.legacydroid.ProfilePreference
+            android:key="profile_performance"
+            android:title="@string/legacy_droid_profile_performance"
+            android:summary="@string/legacy_droid_summary_performance"
+            app:iconSpaceReserved="false" />
+
+        <com.android.settings.legacydroid.ProfilePreference
+            android:key="profile_battery_saver"
+            android:title="@string/legacy_droid_profile_battery_saver"
+            android:summary="@string/legacy_droid_summary_battery_saver"
+            app:iconSpaceReserved="false" />
+
+        <com.android.settings.legacydroid.BatteryStatusPreference
+            android:key="battery_status"
+            android:selectable="false" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
