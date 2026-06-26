@@ -5,24 +5,10 @@
     android:key="legacy_dex"
     android:title="@string/legacy_droid_category_legacy_dex">
 
-    <PreferenceCategory
-        android:key="category_dex_general"
-        android:title="@string/legacy_droid_dex_general"
-        app:iconSpaceReserved="false">
-
-        <SwitchPreference
-            android:key="dex_enable_pc_mode"
-            android:title="@string/legacy_droid_dex_enable_pc_mode"
-            android:summary="@string/legacy_droid_dex_enable_pc_mode_summary"
-            android:defaultValue="false" />
-
-        <SwitchPreference
-            android:key="dex_enable_plugin"
-            android:title="@string/legacy_droid_dex_enable_plugin"
-            android:summary="@string/legacy_droid_dex_enable_plugin_summary"
-            android:defaultValue="false"
-            android:dependency="dex_enable_pc_mode" />
-
-    </PreferenceCategory>
+    <SwitchPreference
+        android:key="dex_enable"
+        android:title="@string/legacy_droid_dex_enable"
+        android:summary="@string/legacy_droid_dex_enable_summary"
+        android:defaultValue="false" />
 
 </PreferenceScreen>

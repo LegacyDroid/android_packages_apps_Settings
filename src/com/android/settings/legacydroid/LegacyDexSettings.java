@@ -6,8 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Process;
+import android.os.RemoteException;
+import android.os.ServiceManager;
 import android.os.SystemProperties;
+import android.provider.Settings;
 import android.util.Log;
+import android.view.IWindowManager;
+import android.view.Surface;
 
 import androidx.preference.SwitchPreference;
 
@@ -24,8 +30,7 @@ public class LegacyDexSettings extends DashboardFragment {
     private static final String PROP_PC_MODE = "persist.sys.pcmode.enabled";
     private static final String PROP_BD_SYSTEMUI = "persist.sys.systemuiplugin.enabled";
 
-    private static final String KEY_PC_MODE = "dex_enable_pc_mode";
-    private static final String KEY_PLUGIN = "dex_enable_plugin";
+    private static final String KEY_MASTER = "dex_enable";
 
     @Override
     public int getMetricsCategory() {
@@ -56,26 +61,36 @@ public class LegacyDexSettings extends DashboardFragment {
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         super.onCreatePreferences(savedInstanceState, rootKey);
 
-        SwitchPreference pcMode = findPreference(KEY_PC_MODE);
-        if (pcMode != null) {
-            pcMode.setChecked(SystemProperties.getBoolean(PROP_PC_MODE, false));
-            pcMode.setOnPreferenceChangeListener((pref, newValue) -> {
+        SwitchPreference master = findPreference(KEY_MASTER);
+        if (master != null) {
+            master.setChecked(SystemProperties.getBoolean(PROP_PC_MODE, false));
+            master.setOnPreferenceChangeListener((pref, newValue) -> {
                 boolean enabled = (Boolean) newValue;
-                SystemProperties.set(PROP_PC_MODE, enabled ? "true" : "false");
+                setLegacyDexEnabled(enabled);
                 return true;
             });
+        }
+    }
+
+    private void setLegacyDexEnabled(boolean enabled) {
+        SystemProperties.set(PROP_PC_MODE, enabled ? "true" : "false");
+        SystemProperties.set(PROP_BD_SYSTEMUI, enabled ? "true" : "false");
+
+        IWindowManager wm = IWindowManager.Stub.asInterface(
+                ServiceManager.getService("window"));
+        try {
+            if (enabled) {
+                wm.freezeRotation(Surface.ROTATION_90);
+            } else {
+                wm.thawRotation();
+            }
+        } catch (RemoteException e) {
+            android.provider.Settings.System.putInt(getContext().getContentResolver(),
+                    android.provider.Settings.System.USER_ROTATION,
+                    enabled ? Surface.ROTATION_90 : Surface.ROTATION_0);
         }
 
-        SwitchPreference plugin = findPreference(KEY_PLUGIN);
-        if (plugin != null) {
-            plugin.setChecked(SystemProperties.getBoolean(PROP_BD_SYSTEMUI, false));
-            plugin.setOnPreferenceChangeListener((pref, newValue) -> {
-                boolean enabled = (Boolean) newValue;
-                SystemProperties.set(PROP_BD_SYSTEMUI, enabled ? "true" : "false");
-                restartSystemUI();
-                return true;
-            });
-        }
+        restartSystemUI();
     }
 
     private void restartSystemUI() {
