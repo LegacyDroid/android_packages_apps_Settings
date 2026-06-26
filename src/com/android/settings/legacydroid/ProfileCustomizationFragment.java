@@ -84,7 +84,7 @@ public class ProfileCustomizationFragment extends DashboardFragment {
                 sp.setOnPreferenceChangeListener((preference, newValue) -> {
                     prefs.edit().putBoolean(profile + "_" + key, (Boolean) newValue).apply();
                     if (profile.equals(activeProfile)) {
-                        LegacyDroidSettings.applyAction(getContext(), key, (Boolean) newValue);
+                        PerformanceBatterySettings.applyAction(getContext(), key, (Boolean) newValue);
                     }
                     return true;
                 });
@@ -93,7 +93,7 @@ public class ProfileCustomizationFragment extends DashboardFragment {
     }
 
     private boolean getActionDefault(String profile, String action) {
-        return LegacyDroidSettings.getActionDefault(profile, action);
+        return PerformanceBatterySettings.getActionDefault(profile, action);
     }
 
     public static Bundle createArgs(String profile, String activeProfile) {

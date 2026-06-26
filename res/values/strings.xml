@@ -12278,4 +12278,21 @@
     <string name="legacy_droid_api_level_title">LegacyDroid API level</string>
     <string name="legacy_droid_vendor_security_patch_title">Vendor security patch</string>
     <string name="legacy_droid_build_date_title">Build date</string>
+
+    <!-- LegacyDroid banner title -->
+    <string name="legacy_droid_banner_title">LegacyDroid</string>
+
+    <!-- LegacyDroid taglines -->
+    <string name="legacy_droid_tagline_hardware">Your hardware, your rules.</string>
+    <string name="legacy_droid_tagline_android11">The Android 11 you were always promised.</string>
+    <string name="legacy_droid_tagline_old">Old don\'t always mean bad.</string>
+    <string name="legacy_droid_tagline_transitions">LegacyDroid: Because transitions shouldn\'t look like ass.</string>
+
+    <!-- LegacyDroid Settings hub -->
+    <string name="legacy_droid_performance_battery_summary">Tweak performance profiles, refresh rate, and power saving</string>
+    <string name="legacy_droid_category_legacy_dex">LegacyDex / Desktop Mode</string>
+    <string name="legacy_droid_legacy_dex_summary">Toggle desktop mode, freeform windows, and landscape UI</string>
+    <string name="legacy_droid_dex_general">General</string>
+    <string name="legacy_droid_dex_enable">Enable desktop mode</string>
+    <string name="legacy_droid_dex_enable_summary">Switch to landscape desktop UI with freeform windows</string>
 </resources>

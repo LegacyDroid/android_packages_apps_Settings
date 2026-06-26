@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:key="legacy_dex"
+    android:title="@string/legacy_droid_category_legacy_dex">
+
+    <PreferenceCategory
+        android:key="category_dex_general"
+        android:title="@string/legacy_droid_dex_general"
+        app:iconSpaceReserved="false">
+
+        <SwitchPreference
+            android:key="dex_enable"
+            android:title="@string/legacy_droid_dex_enable"
+            android:summary="@string/legacy_droid_dex_enable_summary"
+            android:defaultValue="false" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
