@@ -12295,4 +12295,8 @@
     <string name="legacy_droid_dex_general">General</string>
     <string name="legacy_droid_dex_enable">Enable desktop mode</string>
     <string name="legacy_droid_dex_enable_summary">Switch to landscape desktop UI with freeform windows</string>
+    <string name="legacy_droid_dex_enable_pc_mode">Enable PC Mode</string>
+    <string name="legacy_droid_dex_enable_pc_mode_summary">Force freeform windowing mode for all apps</string>
+    <string name="legacy_droid_dex_enable_plugin">Boringdroid SystemUI Plugin</string>
+    <string name="legacy_droid_dex_enable_plugin_summary">Use desktop-style navigation bar and UI</string>
 </resources>
