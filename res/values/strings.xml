@@ -12299,4 +12299,6 @@
     <string name="legacy_droid_dex_enable_pc_mode_summary">Force freeform windowing mode for all apps</string>
     <string name="legacy_droid_dex_enable_plugin">Boringdroid SystemUI Plugin</string>
     <string name="legacy_droid_dex_enable_plugin_summary">Use desktop-style navigation bar and UI</string>
+    <string name="legacy_droid_dex_force_resizable">Force resize non-resizable apps</string>
+    <string name="legacy_droid_dex_force_resizable_summary">Allow resizing apps that normally don\'t support freeform</string>
 </resources>

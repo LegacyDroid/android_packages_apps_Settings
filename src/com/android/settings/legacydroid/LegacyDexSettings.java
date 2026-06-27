@@ -31,6 +31,7 @@ public class LegacyDexSettings extends DashboardFragment {
     private static final String PROP_BD_SYSTEMUI = "persist.sys.systemuiplugin.enabled";
 
     private static final String KEY_MASTER = "dex_enable";
+    private static final String KEY_FORCE_RESIZE = "dex_force_resize";
 
     @Override
     public int getMetricsCategory() {
@@ -67,6 +68,20 @@ public class LegacyDexSettings extends DashboardFragment {
             master.setOnPreferenceChangeListener((pref, newValue) -> {
                 boolean enabled = (Boolean) newValue;
                 setLegacyDexEnabled(enabled);
+                return true;
+            });
+        }
+
+        SwitchPreference forceResize = findPreference(KEY_FORCE_RESIZE);
+        if (forceResize != null) {
+            int val = Settings.Global.getInt(getContext().getContentResolver(),
+                    Settings.Global.DEVELOPMENT_FORCE_RESIZABLE_ACTIVITIES, 0);
+            forceResize.setChecked(val != 0);
+            forceResize.setOnPreferenceChangeListener((pref, newValue) -> {
+                boolean enabled = (Boolean) newValue;
+                Settings.Global.putInt(getContext().getContentResolver(),
+                        Settings.Global.DEVELOPMENT_FORCE_RESIZABLE_ACTIVITIES,
+                        enabled ? 1 : 0);
                 return true;
             });
         }
