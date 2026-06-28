@@ -1,8 +1,10 @@
 package com.android.settings.legacydroid;
 
+import android.app.AlertDialog;
 import android.app.settings.SettingsEnums;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -33,6 +35,8 @@ public class LegacyDexSettings extends DashboardFragment {
     private static final String KEY_MASTER = "dex_enable";
     private static final String KEY_FORCE_RESIZE = "dex_force_resize";
 
+    private SwitchPreference mMasterPref;
+
     @Override
     public int getMetricsCategory() {
         return SettingsEnums.SETTINGS_HOMEPAGE;
@@ -62,13 +66,18 @@ public class LegacyDexSettings extends DashboardFragment {
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         super.onCreatePreferences(savedInstanceState, rootKey);
 
-        SwitchPreference master = findPreference(KEY_MASTER);
-        if (master != null) {
-            master.setChecked(SystemProperties.getBoolean(PROP_PC_MODE, false));
-            master.setOnPreferenceChangeListener((pref, newValue) -> {
+        mMasterPref = findPreference(KEY_MASTER);
+        if (mMasterPref != null) {
+            mMasterPref.setChecked(SystemProperties.getBoolean(PROP_PC_MODE, false));
+            mMasterPref.setOnPreferenceChangeListener((pref, newValue) -> {
                 boolean enabled = (Boolean) newValue;
-                setLegacyDexEnabled(enabled);
-                return true;
+                if (enabled) {
+                    showWarningDialog();
+                    return false;
+                } else {
+                    setLegacyDexEnabled(false);
+                    return true;
+                }
             });
         }
 
@@ -85,6 +94,25 @@ public class LegacyDexSettings extends DashboardFragment {
                 return true;
             });
         }
+    }
+
+    private void showWarningDialog() {
+        new AlertDialog.Builder(getContext())
+                .setTitle(R.string.legacy_dex_warning_title)
+                .setMessage(R.string.legacy_dex_warning_message)
+                .setPositiveButton(R.string.legacy_dex_warning_accept,
+                        (dialog, which) -> {
+                            mMasterPref.setChecked(true);
+                            setLegacyDexEnabled(true);
+                        })
+                .setNegativeButton(android.R.string.cancel,
+                        (dialog, which) -> mMasterPref.setChecked(false))
+                .setOnDismissListener(dialog -> {
+                    if (!SystemProperties.getBoolean(PROP_PC_MODE, false)) {
+                        mMasterPref.setChecked(false);
+                    }
+                })
+                .show();
     }
 
     private void setLegacyDexEnabled(boolean enabled) {
