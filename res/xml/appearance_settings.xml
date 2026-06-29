@@ -10,7 +10,7 @@
         android:summary="@string/legacy_droid_blur_enable_summary"
         android:defaultValue="true" />
 
-    <SeekBarPreference
+    <com.android.settings.widget.SeekBarPreference
         android:key="blur_radius"
         android:title="@string/legacy_droid_blur_radius"
         android:defaultValue="25" />

@@ -6,8 +6,9 @@ import android.os.Bundle;
 import android.os.SystemProperties;
 
 import androidx.preference.ListPreference;
-import androidx.preference.SeekBarPreference;
 import androidx.preference.SwitchPreference;
+
+import com.android.settings.widget.SeekBarPreference;
 
 import com.android.settings.R;
 import com.android.settings.dashboard.DashboardFragment;
@@ -71,7 +72,7 @@ public class AppearanceSettings extends DashboardFragment {
             blurRadius.setMax(50);
             blurRadius.setMin(1);
             int val = SystemProperties.getInt(PROP_BLUR_RADIUS, 25);
-            blurRadius.setValue(val);
+            blurRadius.setProgress(val);
             blurRadius.setSummary(Integer.toString(val));
             blurRadius.setOnPreferenceChangeListener((pref, newValue) -> {
                 int radius = (Integer) newValue;
