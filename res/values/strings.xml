@@ -12306,4 +12306,15 @@
     <string name="legacy_dex_warning_title">LegacyDex Warning</string>
     <string name="legacy_dex_warning_message">WARNING: LegacyDex is under development and still NOT yet stable, use at your own risk</string>
     <string name="legacy_dex_warning_accept">I Understand</string>
+
+    <!-- LegacyDroid Appearance -->
+    <string name="legacy_droid_category_appearance">Appearance</string>
+    <string name="legacy_droid_appearance_summary">Customize blur and visual effects</string>
+    <string name="legacy_droid_blur_enable">LegacyBlur</string>
+    <string name="legacy_droid_blur_enable_summary">Blur screen content behind Quick Settings shade</string>
+    <string name="legacy_droid_blur_radius">Blur strength</string>
+    <string name="legacy_droid_blur_backend">Render backend</string>
+    <string name="legacy_droid_blur_backend_summary">RenderScript (stable) or OpenGL (experimental)</string>
+    <string name="legacy_droid_blur_backend_rs">RenderScript (stable)</string>
+    <string name="legacy_droid_blur_backend_opengl">OpenGL (experimental)</string>
 </resources>
