@@ -10,4 +10,10 @@
         android:summary="@string/legacy_droid_blur_settings_summary"
         android:fragment="com.android.settings.legacydroid.BlurSettings" />
 
+    <SwitchPreference
+        android:key="fluid_animations"
+        android:title="@string/legacy_droid_fluid_animations"
+        android:summary="@string/legacy_droid_fluid_animations_summary"
+        android:defaultValue="false" />
+
 </PreferenceScreen>
