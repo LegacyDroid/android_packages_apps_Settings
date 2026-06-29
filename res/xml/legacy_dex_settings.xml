@@ -37,8 +37,8 @@
             android:key="blur_radius"
             android:title="@string/legacy_droid_blur_radius"
             android:defaultValue="25"
-            android:min="1"
-            android:max="50"
+            settings:min="1"
+            settings:max="50"
             settings:showSeekBarValue="true" />
 
         <ListPreference
