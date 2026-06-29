@@ -23,10 +23,12 @@ public class AppearanceSettings extends DashboardFragment {
     private static final String PROP_BLUR_ENABLED = "persist.sys.legacyblur.enabled";
     private static final String PROP_BLUR_RADIUS = "persist.sys.legacyblur.radius";
     private static final String PROP_BLUR_BACKEND = "persist.sys.legacyblur.backend";
+    private static final String PROP_BLUR_QUALITY = "persist.sys.legacyblur.scale";
 
     private static final String KEY_BLUR_ENABLE = "blur_enable";
     private static final String KEY_BLUR_RADIUS = "blur_radius";
     private static final String KEY_BLUR_BACKEND = "blur_backend";
+    private static final String KEY_BLUR_QUALITY = "blur_quality";
 
     @Override
     public int getMetricsCategory() {
@@ -88,6 +90,16 @@ public class AppearanceSettings extends DashboardFragment {
             blurBackend.setValue(val);
             blurBackend.setOnPreferenceChangeListener((pref, newValue) -> {
                 SystemProperties.set(PROP_BLUR_BACKEND, (String) newValue);
+                return true;
+            });
+        }
+
+        ListPreference blurQuality = findPreference(KEY_BLUR_QUALITY);
+        if (blurQuality != null) {
+            String val = SystemProperties.get(PROP_BLUR_QUALITY, "8");
+            blurQuality.setValue(val);
+            blurQuality.setOnPreferenceChangeListener((pref, newValue) -> {
+                SystemProperties.set(PROP_BLUR_QUALITY, (String) newValue);
                 return true;
             });
         }

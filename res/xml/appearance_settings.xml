@@ -23,4 +23,11 @@
         android:entries="@array/legacy_droid_blur_backend_entries"
         android:entryValues="@array/legacy_droid_blur_backend_values" />
 
+    <ListPreference
+        android:key="blur_quality"
+        android:title="@string/legacy_droid_blur_quality"
+        android:defaultValue="8"
+        android:entries="@array/legacy_droid_blur_quality_entries"
+        android:entryValues="@array/legacy_droid_blur_quality_values" />
+
 </PreferenceScreen>

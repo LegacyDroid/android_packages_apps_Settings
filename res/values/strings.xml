@@ -12317,4 +12317,9 @@
     <string name="legacy_droid_blur_backend_summary">RenderScript (stable) or OpenGL (experimental)</string>
     <string name="legacy_droid_blur_backend_rs">RenderScript (stable)</string>
     <string name="legacy_droid_blur_backend_opengl">OpenGL (experimental)</string>
+    <string name="legacy_droid_blur_quality">Screenshot quality</string>
+    <string name="legacy_droid_blur_quality_highest">Highest (1/2)</string>
+    <string name="legacy_droid_blur_quality_high">High (1/4)</string>
+    <string name="legacy_droid_blur_quality_medium">Medium (1/8)</string>
+    <string name="legacy_droid_blur_quality_low">Low (1/16)</string>
 </resources>
