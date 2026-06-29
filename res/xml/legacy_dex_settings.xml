@@ -16,4 +16,10 @@
         android:summary="@string/legacy_droid_dex_force_resizable_summary"
         android:defaultValue="false" />
 
+    <SwitchPreference
+        android:key="fluid_animations"
+        android:title="@string/legacy_droid_fluid_animations"
+        android:summary="@string/legacy_droid_fluid_animations_summary"
+        android:defaultValue="true" />
+
 </PreferenceScreen>

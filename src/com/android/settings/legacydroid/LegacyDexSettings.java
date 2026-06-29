@@ -31,9 +31,11 @@ public class LegacyDexSettings extends DashboardFragment {
     private static final String TAG = "LegacyDexSettings";
     private static final String PROP_PC_MODE = "persist.sys.pcmode.enabled";
     private static final String PROP_BD_SYSTEMUI = "persist.sys.systemuiplugin.enabled";
+    private static final String PROP_FLUID_ANIM = "persist.sys.fluid_animations.enabled";
 
     private static final String KEY_MASTER = "dex_enable";
     private static final String KEY_FORCE_RESIZE = "dex_force_resize";
+    private static final String KEY_FLUID_ANIM = "fluid_animations";
 
     private SwitchPreference mMasterPref;
 
@@ -91,6 +93,15 @@ public class LegacyDexSettings extends DashboardFragment {
                 Settings.Global.putInt(getContext().getContentResolver(),
                         Settings.Global.DEVELOPMENT_FORCE_RESIZABLE_ACTIVITIES,
                         enabled ? 1 : 0);
+                return true;
+            });
+        }
+
+        SwitchPreference fluidAnim = findPreference(KEY_FLUID_ANIM);
+        if (fluidAnim != null) {
+            fluidAnim.setChecked(SystemProperties.getBoolean(PROP_FLUID_ANIM, true));
+            fluidAnim.setOnPreferenceChangeListener((pref, newValue) -> {
+                SystemProperties.set(PROP_FLUID_ANIM, (Boolean) newValue ? "true" : "false");
                 return true;
             });
         }
