@@ -17,9 +17,6 @@ import android.util.Log;
 import android.view.IWindowManager;
 import android.view.Surface;
 
-import androidx.preference.ListPreference;
-import androidx.preference.Preference;
-import androidx.preference.SeekBarPreference;
 import androidx.preference.SwitchPreference;
 
 import com.android.settings.R;
@@ -34,15 +31,9 @@ public class LegacyDexSettings extends DashboardFragment {
     private static final String TAG = "LegacyDexSettings";
     private static final String PROP_PC_MODE = "persist.sys.pcmode.enabled";
     private static final String PROP_BD_SYSTEMUI = "persist.sys.systemuiplugin.enabled";
-    private static final String PROP_BLUR_ENABLED = "persist.sys.legacyblur.enabled";
-    private static final String PROP_BLUR_RADIUS = "persist.sys.legacyblur.radius";
-    private static final String PROP_BLUR_BACKEND = "persist.sys.legacyblur.backend";
 
     private static final String KEY_MASTER = "dex_enable";
     private static final String KEY_FORCE_RESIZE = "dex_force_resize";
-    private static final String KEY_BLUR_ENABLE = "blur_enable";
-    private static final String KEY_BLUR_RADIUS = "blur_radius";
-    private static final String KEY_BLUR_BACKEND = "blur_backend";
 
     private SwitchPreference mMasterPref;
 
@@ -100,41 +91,6 @@ public class LegacyDexSettings extends DashboardFragment {
                 Settings.Global.putInt(getContext().getContentResolver(),
                         Settings.Global.DEVELOPMENT_FORCE_RESIZABLE_ACTIVITIES,
                         enabled ? 1 : 0);
-                return true;
-            });
-        }
-
-        SwitchPreference blurEnable = findPreference(KEY_BLUR_ENABLE);
-        if (blurEnable != null) {
-            blurEnable.setChecked(SystemProperties.getBoolean(PROP_BLUR_ENABLED, true));
-            blurEnable.setOnPreferenceChangeListener((pref, newValue) -> {
-                boolean enabled = (Boolean) newValue;
-                SystemProperties.set(PROP_BLUR_ENABLED, enabled ? "true" : "false");
-                return true;
-            });
-        }
-
-        SeekBarPreference blurRadius = findPreference(KEY_BLUR_RADIUS);
-        if (blurRadius != null) {
-            blurRadius.setMax(50);
-            blurRadius.setMin(1);
-            int val = SystemProperties.getInt(PROP_BLUR_RADIUS, 25);
-            blurRadius.setValue(val);
-            blurRadius.setSummary(Integer.toString(val));
-            blurRadius.setOnPreferenceChangeListener((pref, newValue) -> {
-                int radius = (Integer) newValue;
-                SystemProperties.set(PROP_BLUR_RADIUS, Integer.toString(radius));
-                pref.setSummary(Integer.toString(radius));
-                return true;
-            });
-        }
-
-        ListPreference blurBackend = findPreference(KEY_BLUR_BACKEND);
-        if (blurBackend != null) {
-            String val = SystemProperties.get(PROP_BLUR_BACKEND, "0");
-            blurBackend.setValue(val);
-            blurBackend.setOnPreferenceChangeListener((pref, newValue) -> {
-                SystemProperties.set(PROP_BLUR_BACKEND, (String) newValue);
                 return true;
             });
         }

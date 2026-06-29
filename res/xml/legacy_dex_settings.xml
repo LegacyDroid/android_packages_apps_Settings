@@ -2,49 +2,18 @@
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:key="legacy_dex"
-    android:title="@string/legacy_droid_settings_title">
+    android:title="@string/legacy_droid_category_legacy_dex">
 
-    <PreferenceCategory
-        android:key="category_legacy_dex"
-        android:title="@string/legacy_droid_category_legacy_dex">
+    <SwitchPreference
+        android:key="dex_enable"
+        android:title="@string/legacy_droid_dex_enable"
+        android:summary="@string/legacy_droid_dex_enable_summary"
+        android:defaultValue="false" />
 
-        <SwitchPreference
-            android:key="dex_enable"
-            android:title="@string/legacy_droid_dex_enable"
-            android:summary="@string/legacy_droid_dex_enable_summary"
-            android:defaultValue="false" />
-
-        <SwitchPreference
-            android:key="dex_force_resize"
-            android:title="@string/legacy_droid_dex_force_resizable"
-            android:summary="@string/legacy_droid_dex_force_resizable_summary"
-            android:defaultValue="false" />
-
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:key="category_appearance"
-        android:title="@string/legacy_droid_category_appearance">
-
-        <SwitchPreference
-            android:key="blur_enable"
-            android:title="@string/legacy_droid_blur_enable"
-            android:summary="@string/legacy_droid_blur_enable_summary"
-            android:defaultValue="true" />
-
-        <SeekBarPreference
-            android:key="blur_radius"
-            android:title="@string/legacy_droid_blur_radius"
-            android:defaultValue="25" />
-
-        <ListPreference
-            android:key="blur_backend"
-            android:title="@string/legacy_droid_blur_backend"
-            android:summary="@string/legacy_droid_blur_backend_summary"
-            android:defaultValue="0"
-            android:entries="@array/legacy_droid_blur_backend_entries"
-            android:entryValues="@array/legacy_droid_blur_backend_values" />
-
-    </PreferenceCategory>
+    <SwitchPreference
+        android:key="dex_force_resize"
+        android:title="@string/legacy_droid_dex_force_resizable"
+        android:summary="@string/legacy_droid_dex_force_resizable_summary"
+        android:defaultValue="false" />
 
 </PreferenceScreen>

@@ -19,4 +19,11 @@
         app:iconSpaceReserved="false"
         android:fragment="com.android.settings.legacydroid.LegacyDexSettings" />
 
+    <Preference
+        android:key="appearance"
+        android:title="@string/legacy_droid_category_appearance"
+        android:summary="@string/legacy_droid_appearance_summary"
+        app:iconSpaceReserved="false"
+        android:fragment="com.android.settings.legacydroid.AppearanceSettings" />
+
 </PreferenceScreen>
