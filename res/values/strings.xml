@@ -12309,7 +12309,9 @@
 
     <!-- LegacyDroid Appearance -->
     <string name="legacy_droid_category_appearance">Appearance</string>
-    <string name="legacy_droid_appearance_summary">Customize blur and visual effects</string>
+    <string name="legacy_droid_appearance_summary">Visual customization</string>
+    <string name="legacy_droid_blur_settings">Blur</string>
+    <string name="legacy_droid_blur_settings_summary">Blur QS shade, render backend, quality</string>
     <string name="legacy_droid_blur_enable">LegacyBlur</string>
     <string name="legacy_droid_blur_enable_summary">Blur screen content behind Quick Settings shade</string>
     <string name="legacy_droid_blur_radius">Blur strength</string>

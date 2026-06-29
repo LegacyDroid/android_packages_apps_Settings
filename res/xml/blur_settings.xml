@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="blur"
+    android:title="@string/legacy_droid_blur_settings">
+
+    <SwitchPreference
+        android:key="blur_enable"
+        android:title="@string/legacy_droid_blur_enable"
+        android:summary="@string/legacy_droid_blur_enable_summary"
+        android:defaultValue="true" />
+
+    <com.android.settings.widget.SeekBarPreference
+        android:key="blur_radius"
+        android:title="@string/legacy_droid_blur_radius"
+        android:defaultValue="25" />
+
+    <ListPreference
+        android:key="blur_backend"
+        android:title="@string/legacy_droid_blur_backend"
+        android:summary="@string/legacy_droid_blur_backend_summary"
+        android:defaultValue="0"
+        android:entries="@array/legacy_droid_blur_backend_entries"
+        android:entryValues="@array/legacy_droid_blur_backend_values" />
+
+    <ListPreference
+        android:key="blur_quality"
+        android:title="@string/legacy_droid_blur_quality"
+        android:defaultValue="8"
+        android:entries="@array/legacy_droid_blur_quality_entries"
+        android:entryValues="@array/legacy_droid_blur_quality_values" />
+
+</PreferenceScreen>
