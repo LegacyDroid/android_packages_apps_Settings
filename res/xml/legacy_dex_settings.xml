@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:settings="http://schemas.android.com/apk/res-auto"
     android:key="legacy_dex"
     android:title="@string/legacy_droid_settings_title">
 
@@ -36,10 +35,7 @@
         <SeekBarPreference
             android:key="blur_radius"
             android:title="@string/legacy_droid_blur_radius"
-            android:defaultValue="25"
-            settings:min="1"
-            settings:max="50"
-            settings:showSeekBarValue="true" />
+            android:defaultValue="25" />
 
         <ListPreference
             android:key="blur_backend"

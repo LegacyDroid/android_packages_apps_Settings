@@ -18,6 +18,7 @@ import android.view.IWindowManager;
 import android.view.Surface;
 
 import androidx.preference.ListPreference;
+import androidx.preference.Preference;
 import androidx.preference.SeekBarPreference;
 import androidx.preference.SwitchPreference;
 
@@ -115,11 +116,15 @@ public class LegacyDexSettings extends DashboardFragment {
 
         SeekBarPreference blurRadius = findPreference(KEY_BLUR_RADIUS);
         if (blurRadius != null) {
+            blurRadius.setMax(50);
+            blurRadius.setMin(1);
             int val = SystemProperties.getInt(PROP_BLUR_RADIUS, 25);
             blurRadius.setValue(val);
+            blurRadius.setSummary(Integer.toString(val));
             blurRadius.setOnPreferenceChangeListener((pref, newValue) -> {
                 int radius = (Integer) newValue;
                 SystemProperties.set(PROP_BLUR_RADIUS, Integer.toString(radius));
+                pref.setSummary(Integer.toString(radius));
                 return true;
             });
         }
