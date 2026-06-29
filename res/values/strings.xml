@@ -12302,7 +12302,7 @@
     <string name="legacy_droid_dex_force_resizable">Force resize non-resizable apps</string>
     <string name="legacy_droid_dex_force_resizable_summary">Allow resizing apps that normally don\'t support freeform</string>
     <string name="legacy_droid_fluid_animations">Spring physics animations</string>
-    <string name="legacy_droid_fluid_animations_summary">Smooth spring-based app open/close transitions</string>
+    <string name="legacy_droid_fluid_animations_summary">Experimental spring-based app transitions (unstable)</string>
  
     <!-- LegacyDex warning dialog -->
     <string name="legacy_dex_warning_title">LegacyDex Warning</string>
