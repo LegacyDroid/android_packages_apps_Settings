@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
 import android.provider.Settings;
+import android.util.Log;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -104,6 +105,8 @@ public class LegacydroidAppearanceFragment extends DashboardFragment {
         if (uri != null) {
             image.setSummary(getString(R.string.legacydroid_charging_image_picked_summary,
                     queryDisplayName(uri)));
+            requireContext().grantUriPermission(SYSTEMUI_PACKAGE, uri,
+                    android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
         }
         image.setOnPreferenceClickListener(preference -> {
             mPickImageLauncher.launch(new String[]{"image/*"});
@@ -138,6 +141,7 @@ public class LegacydroidAppearanceFragment extends DashboardFragment {
         // SystemUI reads the picked document directly through a URI permission grant.
         requireContext().grantUriPermission(SYSTEMUI_PACKAGE, uri,
                 android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        Log.i(TAG, "Charging image granted to SystemUI: " + uri);
         final Preference image = findPreference(KEY_IMAGE);
         if (image != null) {
             image.setSummary(getString(R.string.legacydroid_charging_image_picked_summary,
