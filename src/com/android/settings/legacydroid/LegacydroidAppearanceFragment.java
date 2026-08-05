@@ -14,7 +14,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
 import android.provider.Settings;
-import android.util.Base64;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -26,6 +25,8 @@ import com.android.settings.dashboard.DashboardFragment;
 import com.android.settings.widget.SeekBarPreference;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 
 /** LegacyDroid appearance settings: charging animation options. */
@@ -40,9 +41,11 @@ public class LegacydroidAppearanceFragment extends DashboardFragment {
 
     private static final String SETTING_MODE = "legacydroid_charging_animation";
     private static final String SETTING_IMAGE = "legacydroid_charging_image";
-    private static final String SETTING_IMAGE_DATA = "legacydroid_charging_image_data";
     private static final String SETTING_TRANSPARENCY = "legacydroid_charging_image_transparency";
     private static final String SETTING_SIZE = "legacydroid_charging_image_size";
+    private static final String LEGACY_SETTING_IMAGE_DATA = "legacydroid_charging_image_data";
+
+    private static final String IMAGE_FILE = "/data/system/legacydroid_charging_image.png";
 
     private static final String MODE_AOSP = "aosp";
     private static final String MODE_NONE = "none";
@@ -79,6 +82,7 @@ public class LegacydroidAppearanceFragment extends DashboardFragment {
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         super.onCreatePreferences(savedInstanceState, rootKey);
+        Settings.Global.putString(getContentResolver(), LEGACY_SETTING_IMAGE_DATA, null);
         initModePreference();
         initImagePreference();
         initSeekBar(KEY_TRANSPARENCY, SETTING_TRANSPARENCY, DEFAULT_TRANSPARENCY);
@@ -140,10 +144,7 @@ public class LegacydroidAppearanceFragment extends DashboardFragment {
             // Provider does not support persistable grants; fall back to temporary grant.
         }
         Settings.Global.putString(getContentResolver(), SETTING_IMAGE, uri.toString());
-        final String imageData = encodeImageData(uri);
-        if (imageData != null) {
-            Settings.Global.putString(getContentResolver(), SETTING_IMAGE_DATA, imageData);
-        }
+        saveImageFile(uri);
         final Preference image = findPreference(KEY_IMAGE);
         if (image != null) {
             image.setSummary(getString(R.string.legacydroid_charging_image_picked_summary,
@@ -152,21 +153,22 @@ public class LegacydroidAppearanceFragment extends DashboardFragment {
     }
 
     /**
-     * Loads the image (downscaled to at most {@link #MAX_IMAGE_DIMENSION} px) and returns it
-     * as a base64-encoded PNG so SystemUI can read it without needing the content URI grant.
+     * Loads the image (downscaled to at most {@link #MAX_IMAGE_DIMENSION} px) and writes it as a
+     * PNG to {@link #IMAGE_FILE}, which SystemUI reads directly. Settings.Global strings are
+     * limited to 32KB, so the image is passed via the file instead of the settings store.
      */
-    private String encodeImageData(Uri uri) {
+    private void saveImageFile(Uri uri) {
         try {
             final BitmapFactory.Options bounds = new BitmapFactory.Options();
             bounds.inJustDecodeBounds = true;
             try (InputStream stream = getContentResolver().openInputStream(uri)) {
                 if (stream == null) {
-                    return null;
+                    return;
                 }
                 BitmapFactory.decodeStream(stream, null, bounds);
             }
             if (bounds.outWidth <= 0 || bounds.outHeight <= 0) {
-                return null;
+                return;
             }
 
             int sampleSize = 1;
@@ -180,12 +182,12 @@ public class LegacydroidAppearanceFragment extends DashboardFragment {
             Bitmap bitmap;
             try (InputStream stream = getContentResolver().openInputStream(uri)) {
                 if (stream == null) {
-                    return null;
+                    return;
                 }
                 bitmap = BitmapFactory.decodeStream(stream, null, decode);
             }
             if (bitmap == null) {
-                return null;
+                return;
             }
 
             final float scale = Math.min(1f,
@@ -204,9 +206,12 @@ public class LegacydroidAppearanceFragment extends DashboardFragment {
             final ByteArrayOutputStream out = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
             bitmap.recycle();
-            return Base64.encodeToString(out.toByteArray(), Base64.NO_WRAP);
+            try (FileOutputStream file = new FileOutputStream(IMAGE_FILE)) {
+                file.write(out.toByteArray());
+            }
+            new File(IMAGE_FILE).setReadable(true, false);
         } catch (Exception e) {
-            return null;
+            // Keep the previous image if writing fails.
         }
     }
 
