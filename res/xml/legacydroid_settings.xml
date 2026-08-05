@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: 2026 The LegacyDroid Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="legacydroid_settings">
+
+    <PreferenceCategory
+        android:key="legacydroid_category"
+        android:title="@string/legacydroid_category_title">
+
+        <Preference
+            android:fragment="com.android.settings.legacydroid.LegacydroidAppearanceFragment"
+            android:icon="@drawable/ic_settings_display"
+            android:key="legacydroid_appearance"
+            android:title="@string/legacydroid_appearance_title"
+            android:summary="@string/legacydroid_appearance_summary"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

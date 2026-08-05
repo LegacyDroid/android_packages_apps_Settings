@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: 2026 The LegacyDroid Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<resources>
+
+    <string name="legacydroid_settings_title">LegacyDroid</string>
+    <string name="legacydroid_settings_summary">Appearance and LegacyDroid extras</string>
+
+    <string name="legacydroid_category_title">LegacyDroid</string>
+    <string name="legacydroid_appearance_title">Appearance</string>
+    <string name="legacydroid_appearance_summary">Charging and display options</string>
+
+    <string name="legacydroid_charging_category">Charging</string>
+
+    <string name="legacydroid_charging_animation_title">Charging animation</string>
+    <string name="legacydroid_charging_animation_default">Default AOSP</string>
+    <string name="legacydroid_charging_animation_none">None</string>
+    <string name="legacydroid_charging_animation_custom">Custom image</string>
+
+    <string-array name="legacydroid_charging_animation_entries">
+        <item>@string/legacydroid_charging_animation_default</item>
+        <item>@string/legacydroid_charging_animation_none</item>
+        <item>@string/legacydroid_charging_animation_custom</item>
+    </string-array>
+
+    <string-array name="legacydroid_charging_animation_values">
+        <item>aosp</item>
+        <item>none</item>
+        <item>custom</item>
+    </string-array>
+
+    <string name="legacydroid_charging_image_title">Charging image</string>
+    <string name="legacydroid_charging_image_summary">Choose an image from your device (PNG transparency supported)</string>
+    <string name="legacydroid_charging_image_picked_summary">Charging image: %1$s</string>
+
+    <string name="legacydroid_charging_image_transparency_title">Image transparency</string>
+    <string name="legacydroid_charging_image_size_title">Image size</string>
+
+</resources>

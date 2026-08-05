@@ -195,6 +195,15 @@
         settings:highlightableMenuKey="@string/menu_key_system"/>
 
     <com.android.settings.widget.HomepagePreference
+        android:fragment="com.android.settings.legacydroid.LegacydroidSettingsFragment"
+        android:icon="@drawable/ic_android_robot"
+        android:key="top_level_legacydroid"
+        android:order="15"
+        android:title="@string/legacydroid_settings_title"
+        android:summary="@string/legacydroid_settings_summary"
+        settings:highlightableMenuKey="@string/menu_key_legacydroid"/>
+
+    <com.android.settings.widget.HomepagePreference
         android:fragment="com.android.settings.deviceinfo.aboutphone.MyDeviceInfoFragment"
         android:icon="@drawable/ic_settings_about_device"
         android:key="top_level_about_device"

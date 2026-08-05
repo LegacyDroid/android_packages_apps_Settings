@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: 2026 The LegacyDroid Project
+     SPDX-License-Identifier: Apache-2.0
+
+     Android robot head. Source: https://commons.wikimedia.org/wiki/File:Android_robot_head.svg
+     The Android robot is reproduced or modified from work created and shared by
+     Google and used according to terms described in the Creative Commons 3.0
+     Attribution License (https://creativecommons.org/licenses/by/3.0/).
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="128dp"
+    android:height="72dp"
+    android:viewportWidth="918.6"
+    android:viewportHeight="515.1">
+
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M918.6 515.1h-918.6c14.7-155.7 103.7-288.7 235.1-359.9l-76.2-132c-4.3-7.4-1.8-16.8 5.6-21.1s16.8-1.8 21.1 5.6l77.2 133.7c58.9-26.9 125.2-41.9 196.5-41.9s137.6 15 196.5 41.9l77.2-133.7c4.2-7.4 13.7-9.9 21-5.6s9.9 13.7 5.6 21.1l-76.2 132c131.5 71.2 220.5 204.2 235.2 359.9zm-248.5-129c21.3 0 38.6-17.3 38.5-38.5 0-21.2-17.2-38.5-38.5-38.5-21.2 0-38.5 17.2-38.5 38.5 0 21.2 17.2 38.5 38.5 38.5zm-421.7 0c21.3 0 38.6-17.3 38.5-38.5 0-21.2-17.2-38.5-38.5-38.5-21.2 0-38.5 17.2-38.5 38.5 0 21.2 17.2 38.5 38.5 38.5z" />
+</vector>
