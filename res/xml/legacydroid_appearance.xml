@@ -26,14 +26,14 @@
             android:summary="@string/legacydroid_charging_image_summary"
             android:selectable="true"/>
 
-        <SeekBarPreference
+        <com.android.settings.widget.SeekBarPreference
             android:key="legacydroid_charging_image_transparency"
             android:title="@string/legacydroid_charging_image_transparency_title"
             android:defaultValue="0"
             android:max="100"
             android:persistent="false"/>
 
-        <SeekBarPreference
+        <com.android.settings.widget.SeekBarPreference
             android:key="legacydroid_charging_image_size"
             android:title="@string/legacydroid_charging_image_size_title"
             android:defaultValue="100"

@@ -20,10 +20,10 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
-import androidx.preference.SeekBarPreference;
 
 import com.android.settings.R;
 import com.android.settings.dashboard.DashboardFragment;
+import com.android.settings.widget.SeekBarPreference;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -122,7 +122,7 @@ public class LegacydroidAppearanceFragment extends DashboardFragment {
         if (seekBar == null) {
             return;
         }
-        seekBar.setValue(Settings.Global.getInt(getContentResolver(), setting, defaultValue));
+        seekBar.setProgress(Settings.Global.getInt(getContentResolver(), setting, defaultValue));
         seekBar.setOnPreferenceChangeListener((preference, newValue) -> {
             Settings.Global.putInt(getContentResolver(), setting, (Integer) newValue);
             return true;
