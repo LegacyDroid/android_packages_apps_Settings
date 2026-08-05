@@ -136,7 +136,7 @@ public class LegacydroidAppearanceFragment extends DashboardFragment {
         Settings.Global.putString(getContentResolver(), SETTING_IMAGE, uri.toString());
         // Settings.Global strings are limited to 32KB, so no image bytes are stored there;
         // SystemUI reads the picked document directly through a URI permission grant.
-        getContentResolver().grantUriPermission(SYSTEMUI_PACKAGE, uri,
+        requireContext().grantUriPermission(SYSTEMUI_PACKAGE, uri,
                 android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
         final Preference image = findPreference(KEY_IMAGE);
         if (image != null) {
