@@ -8,10 +8,13 @@ package com.android.settings.legacydroid;
 import android.app.settings.SettingsEnums;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
 import android.provider.Settings;
+import android.util.Base64;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -21,6 +24,9 @@ import androidx.preference.SeekBarPreference;
 
 import com.android.settings.R;
 import com.android.settings.dashboard.DashboardFragment;
+
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 
 /** LegacyDroid appearance settings: charging animation options. */
 public class LegacydroidAppearanceFragment extends DashboardFragment {
@@ -34,6 +40,7 @@ public class LegacydroidAppearanceFragment extends DashboardFragment {
 
     private static final String SETTING_MODE = "legacydroid_charging_animation";
     private static final String SETTING_IMAGE = "legacydroid_charging_image";
+    private static final String SETTING_IMAGE_DATA = "legacydroid_charging_image_data";
     private static final String SETTING_TRANSPARENCY = "legacydroid_charging_image_transparency";
     private static final String SETTING_SIZE = "legacydroid_charging_image_size";
 
@@ -43,6 +50,7 @@ public class LegacydroidAppearanceFragment extends DashboardFragment {
 
     private static final int DEFAULT_TRANSPARENCY = 0;
     private static final int DEFAULT_SIZE = 100;
+    private static final int MAX_IMAGE_DIMENSION = 1024;
 
     private ActivityResultLauncher<String[]> mPickImageLauncher;
 
@@ -132,10 +140,73 @@ public class LegacydroidAppearanceFragment extends DashboardFragment {
             // Provider does not support persistable grants; fall back to temporary grant.
         }
         Settings.Global.putString(getContentResolver(), SETTING_IMAGE, uri.toString());
+        final String imageData = encodeImageData(uri);
+        if (imageData != null) {
+            Settings.Global.putString(getContentResolver(), SETTING_IMAGE_DATA, imageData);
+        }
         final Preference image = findPreference(KEY_IMAGE);
         if (image != null) {
             image.setSummary(getString(R.string.legacydroid_charging_image_picked_summary,
                     queryDisplayName(uri)));
+        }
+    }
+
+    /**
+     * Loads the image (downscaled to at most {@link #MAX_IMAGE_DIMENSION} px) and returns it
+     * as a base64-encoded PNG so SystemUI can read it without needing the content URI grant.
+     */
+    private String encodeImageData(Uri uri) {
+        try {
+            final BitmapFactory.Options bounds = new BitmapFactory.Options();
+            bounds.inJustDecodeBounds = true;
+            try (InputStream stream = getContentResolver().openInputStream(uri)) {
+                if (stream == null) {
+                    return null;
+                }
+                BitmapFactory.decodeStream(stream, null, bounds);
+            }
+            if (bounds.outWidth <= 0 || bounds.outHeight <= 0) {
+                return null;
+            }
+
+            int sampleSize = 1;
+            while (bounds.outWidth / (sampleSize * 2) >= MAX_IMAGE_DIMENSION
+                    || bounds.outHeight / (sampleSize * 2) >= MAX_IMAGE_DIMENSION) {
+                sampleSize *= 2;
+            }
+
+            final BitmapFactory.Options decode = new BitmapFactory.Options();
+            decode.inSampleSize = sampleSize;
+            Bitmap bitmap;
+            try (InputStream stream = getContentResolver().openInputStream(uri)) {
+                if (stream == null) {
+                    return null;
+                }
+                bitmap = BitmapFactory.decodeStream(stream, null, decode);
+            }
+            if (bitmap == null) {
+                return null;
+            }
+
+            final float scale = Math.min(1f,
+                    Math.min((float) MAX_IMAGE_DIMENSION / bitmap.getWidth(),
+                            (float) MAX_IMAGE_DIMENSION / bitmap.getHeight()));
+            if (scale < 1f) {
+                final Bitmap scaled = Bitmap.createScaledBitmap(bitmap,
+                        Math.round(bitmap.getWidth() * scale),
+                        Math.round(bitmap.getHeight() * scale), true);
+                if (scaled != bitmap) {
+                    bitmap.recycle();
+                }
+                bitmap = scaled;
+            }
+
+            final ByteArrayOutputStream out = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+            bitmap.recycle();
+            return Base64.encodeToString(out.toByteArray(), Base64.NO_WRAP);
+        } catch (Exception e) {
+            return null;
         }
     }
 
