@@ -8,8 +8,6 @@ package com.android.settings.legacydroid;
 import android.app.settings.SettingsEnums;
 import android.content.Context;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
@@ -23,11 +21,6 @@ import androidx.preference.Preference;
 import com.android.settings.R;
 import com.android.settings.dashboard.DashboardFragment;
 import com.android.settings.widget.SeekBarPreference;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 
 /** LegacyDroid appearance settings: charging animation options. */
 public class LegacydroidAppearanceFragment extends DashboardFragment {
@@ -43,9 +36,8 @@ public class LegacydroidAppearanceFragment extends DashboardFragment {
     private static final String SETTING_IMAGE = "legacydroid_charging_image";
     private static final String SETTING_TRANSPARENCY = "legacydroid_charging_image_transparency";
     private static final String SETTING_SIZE = "legacydroid_charging_image_size";
-    private static final String LEGACY_SETTING_IMAGE_DATA = "legacydroid_charging_image_data";
 
-    private static final String IMAGE_FILE = "/data/system/legacydroid_charging_image.png";
+    private static final String SYSTEMUI_PACKAGE = "com.android.systemui";
 
     private static final String MODE_AOSP = "aosp";
     private static final String MODE_NONE = "none";
@@ -53,7 +45,6 @@ public class LegacydroidAppearanceFragment extends DashboardFragment {
 
     private static final int DEFAULT_TRANSPARENCY = 0;
     private static final int DEFAULT_SIZE = 100;
-    private static final int MAX_IMAGE_DIMENSION = 1024;
 
     private ActivityResultLauncher<String[]> mPickImageLauncher;
 
@@ -82,7 +73,6 @@ public class LegacydroidAppearanceFragment extends DashboardFragment {
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         super.onCreatePreferences(savedInstanceState, rootKey);
-        Settings.Global.putString(getContentResolver(), LEGACY_SETTING_IMAGE_DATA, null);
         initModePreference();
         initImagePreference();
         initSeekBar(KEY_TRANSPARENCY, SETTING_TRANSPARENCY, DEFAULT_TRANSPARENCY);
@@ -144,74 +134,14 @@ public class LegacydroidAppearanceFragment extends DashboardFragment {
             // Provider does not support persistable grants; fall back to temporary grant.
         }
         Settings.Global.putString(getContentResolver(), SETTING_IMAGE, uri.toString());
-        saveImageFile(uri);
+        // Settings.Global strings are limited to 32KB, so no image bytes are stored there;
+        // SystemUI reads the picked document directly through a URI permission grant.
+        getContentResolver().grantUriPermission(SYSTEMUI_PACKAGE, uri,
+                android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
         final Preference image = findPreference(KEY_IMAGE);
         if (image != null) {
             image.setSummary(getString(R.string.legacydroid_charging_image_picked_summary,
                     queryDisplayName(uri)));
-        }
-    }
-
-    /**
-     * Loads the image (downscaled to at most {@link #MAX_IMAGE_DIMENSION} px) and writes it as a
-     * PNG to {@link #IMAGE_FILE}, which SystemUI reads directly. Settings.Global strings are
-     * limited to 32KB, so the image is passed via the file instead of the settings store.
-     */
-    private void saveImageFile(Uri uri) {
-        try {
-            final BitmapFactory.Options bounds = new BitmapFactory.Options();
-            bounds.inJustDecodeBounds = true;
-            try (InputStream stream = getContentResolver().openInputStream(uri)) {
-                if (stream == null) {
-                    return;
-                }
-                BitmapFactory.decodeStream(stream, null, bounds);
-            }
-            if (bounds.outWidth <= 0 || bounds.outHeight <= 0) {
-                return;
-            }
-
-            int sampleSize = 1;
-            while (bounds.outWidth / (sampleSize * 2) >= MAX_IMAGE_DIMENSION
-                    || bounds.outHeight / (sampleSize * 2) >= MAX_IMAGE_DIMENSION) {
-                sampleSize *= 2;
-            }
-
-            final BitmapFactory.Options decode = new BitmapFactory.Options();
-            decode.inSampleSize = sampleSize;
-            Bitmap bitmap;
-            try (InputStream stream = getContentResolver().openInputStream(uri)) {
-                if (stream == null) {
-                    return;
-                }
-                bitmap = BitmapFactory.decodeStream(stream, null, decode);
-            }
-            if (bitmap == null) {
-                return;
-            }
-
-            final float scale = Math.min(1f,
-                    Math.min((float) MAX_IMAGE_DIMENSION / bitmap.getWidth(),
-                            (float) MAX_IMAGE_DIMENSION / bitmap.getHeight()));
-            if (scale < 1f) {
-                final Bitmap scaled = Bitmap.createScaledBitmap(bitmap,
-                        Math.round(bitmap.getWidth() * scale),
-                        Math.round(bitmap.getHeight() * scale), true);
-                if (scaled != bitmap) {
-                    bitmap.recycle();
-                }
-                bitmap = scaled;
-            }
-
-            final ByteArrayOutputStream out = new ByteArrayOutputStream();
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
-            bitmap.recycle();
-            try (FileOutputStream file = new FileOutputStream(IMAGE_FILE)) {
-                file.write(out.toByteArray());
-            }
-            new File(IMAGE_FILE).setReadable(true, false);
-        } catch (Exception e) {
-            // Keep the previous image if writing fails.
         }
     }
 
