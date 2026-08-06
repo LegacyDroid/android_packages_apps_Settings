@@ -8,10 +8,13 @@ package com.android.settings.legacydroid;
 import android.app.settings.SettingsEnums;
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
 import android.provider.Settings;
+import android.util.Base64;
 import android.util.Log;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -22,6 +25,9 @@ import androidx.preference.Preference;
 import com.android.settings.R;
 import com.android.settings.dashboard.DashboardFragment;
 import com.android.settings.widget.SeekBarPreference;
+
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 
 /** LegacyDroid appearance settings: charging animation options. */
 public class LegacydroidAppearanceFragment extends DashboardFragment {
@@ -35,10 +41,9 @@ public class LegacydroidAppearanceFragment extends DashboardFragment {
 
     private static final String SETTING_MODE = "legacydroid_charging_animation";
     private static final String SETTING_IMAGE = "legacydroid_charging_image";
+    private static final String SETTING_IMAGE_DATA = "legacydroid_charging_image_data";
     private static final String SETTING_TRANSPARENCY = "legacydroid_charging_image_transparency";
     private static final String SETTING_SIZE = "legacydroid_charging_image_size";
-
-    private static final String SYSTEMUI_PACKAGE = "com.android.systemui";
 
     private static final String MODE_AOSP = "aosp";
     private static final String MODE_NONE = "none";
@@ -46,6 +51,8 @@ public class LegacydroidAppearanceFragment extends DashboardFragment {
 
     private static final int DEFAULT_TRANSPARENCY = 0;
     private static final int DEFAULT_SIZE = 100;
+    private static final int MAX_ENCODED_BYTES = 22000;
+    private static final int MAX_DECODE_DIMENSION = 2048;
 
     private ActivityResultLauncher<String[]> mPickImageLauncher;
 
@@ -105,8 +112,6 @@ public class LegacydroidAppearanceFragment extends DashboardFragment {
         if (uri != null) {
             image.setSummary(getString(R.string.legacydroid_charging_image_picked_summary,
                     queryDisplayName(uri)));
-            requireContext().grantUriPermission(SYSTEMUI_PACKAGE, uri,
-                    android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
         }
         image.setOnPreferenceClickListener(preference -> {
             mPickImageLauncher.launch(new String[]{"image/*"});
@@ -137,15 +142,85 @@ public class LegacydroidAppearanceFragment extends DashboardFragment {
             // Provider does not support persistable grants; fall back to temporary grant.
         }
         Settings.Global.putString(getContentResolver(), SETTING_IMAGE, uri.toString());
-        // Settings.Global strings are limited to 32KB, so no image bytes are stored there;
-        // SystemUI reads the picked document directly through a URI permission grant.
-        requireContext().grantUriPermission(SYSTEMUI_PACKAGE, uri,
-                android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        Log.i(TAG, "Charging image granted to SystemUI: " + uri);
+        // The media documents provider refuses plain URI grants (it requires access obtained
+        // via ACTION_OPEN_DOCUMENT), so the image bytes are stored in Settings.Global instead.
+        // Strings there are capped at 32KB, hence the JPEG is encoded to fit.
+        final String imageData = encodeImageData(uri);
+        if (imageData != null) {
+            Settings.Global.putString(getContentResolver(), SETTING_IMAGE_DATA, imageData);
+        }
         final Preference image = findPreference(KEY_IMAGE);
         if (image != null) {
             image.setSummary(getString(R.string.legacydroid_charging_image_picked_summary,
                     queryDisplayName(uri)));
+        }
+    }
+
+    /**
+     * Loads the image, downscales it, and returns a base64-encoded JPEG small enough for
+     * {@link Settings.Global} (strings capped at 32KB). The MediaDocumentsProvider will not
+     * serve its documents to SystemUI through a URI grant, so this is the only channel that
+     * works without extra permissions.
+     */
+    private String encodeImageData(Uri uri) {
+        try {
+            final BitmapFactory.Options bounds = new BitmapFactory.Options();
+            bounds.inJustDecodeBounds = true;
+            try (InputStream stream = getContentResolver().openInputStream(uri)) {
+                if (stream == null) {
+                    return null;
+                }
+                BitmapFactory.decodeStream(stream, null, bounds);
+            }
+            if (bounds.outWidth <= 0 || bounds.outHeight <= 0) {
+                return null;
+            }
+
+            int sampleSize = 1;
+            while (bounds.outWidth / sampleSize > MAX_DECODE_DIMENSION
+                    || bounds.outHeight / sampleSize > MAX_DECODE_DIMENSION) {
+                sampleSize *= 2;
+            }
+
+            final BitmapFactory.Options decode = new BitmapFactory.Options();
+            decode.inSampleSize = sampleSize;
+            Bitmap bitmap;
+            try (InputStream stream = getContentResolver().openInputStream(uri)) {
+                if (stream == null) {
+                    return null;
+                }
+                bitmap = BitmapFactory.decodeStream(stream, null, decode);
+            }
+            if (bitmap == null) {
+                return null;
+            }
+
+            final ByteArrayOutputStream out = new ByteArrayOutputStream();
+            int quality = 85;
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, out);
+            while (out.size() > MAX_ENCODED_BYTES && quality > 40) {
+                quality -= 10;
+                out.reset();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, quality, out);
+            }
+            while (out.size() > MAX_ENCODED_BYTES) {
+                final Bitmap scaled = Bitmap.createScaledBitmap(bitmap,
+                        Math.max(1, bitmap.getWidth() / 2),
+                        Math.max(1, bitmap.getHeight() / 2), true);
+                if (scaled != bitmap) {
+                    bitmap.recycle();
+                }
+                bitmap = scaled;
+                out.reset();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, quality, out);
+            }
+            bitmap.recycle();
+            final String encoded = Base64.encodeToString(out.toByteArray(), Base64.NO_WRAP);
+            Log.i(TAG, "Charging image encoded: " + out.size() + " bytes");
+            return encoded;
+        } catch (Exception e) {
+            Log.w(TAG, "Failed to encode charging image", e);
+            return null;
         }
     }
 
