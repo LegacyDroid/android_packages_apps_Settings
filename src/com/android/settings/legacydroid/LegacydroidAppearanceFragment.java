@@ -94,7 +94,8 @@ public class LegacydroidAppearanceFragment extends DashboardFragment {
             return;
         }
         mode.setValue(getCurrentMode());
-        mode.setSummary(mode.getEntry());
+        // The XML summary "%s" is auto-formatted with the selected entry; do not set a
+        // static summary here or it will stop reflecting future selections.
         mode.setOnPreferenceChangeListener((preference, newValue) -> {
             final String value = (String) newValue;
             Settings.Global.putString(getContentResolver(), SETTING_MODE, value);
