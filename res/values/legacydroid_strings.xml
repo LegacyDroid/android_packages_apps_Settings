@@ -15,6 +15,7 @@
     <string name="legacydroid_charging_category">Charging</string>
 
     <string name="legacydroid_charging_animation_title">Charging animation</string>
+    <string name="legacydroid_charging_animation_summary">Animation, custom image and size</string>
     <string name="legacydroid_charging_animation_default">Default AOSP</string>
     <string name="legacydroid_charging_animation_none">None</string>
     <string name="legacydroid_charging_animation_custom">Custom image</string>
