@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: 2026 The LegacyDroid Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="legacydroid_charging_animation_screen">
+
+    <PreferenceCategory
+        android:key="legacydroid_charging_category"
+        android:title="@string/legacydroid_charging_category">
+
+        <ListPreference
+            android:key="legacydroid_charging_animation"
+            android:title="@string/legacydroid_charging_animation_title"
+            android:summary="%s"
+            android:entries="@array/legacydroid_charging_animation_entries"
+            android:entryValues="@array/legacydroid_charging_animation_values"
+            android:defaultValue="aosp"
+            android:persistent="false"/>
+
+        <Preference
+            android:key="legacydroid_charging_image"
+            android:title="@string/legacydroid_charging_image_title"
+            android:summary="@string/legacydroid_charging_image_summary"
+            android:selectable="true"/>
+
+        <com.android.settings.widget.SeekBarPreference
+            android:key="legacydroid_charging_image_transparency"
+            android:title="@string/legacydroid_charging_image_transparency_title"
+            android:defaultValue="0"
+            android:max="100"
+            android:persistent="false"/>
+
+        <com.android.settings.widget.SeekBarPreference
+            android:key="legacydroid_charging_image_size"
+            android:title="@string/legacydroid_charging_image_size_title"
+            android:defaultValue="100"
+            android:max="200"
+            android:persistent="false"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>
