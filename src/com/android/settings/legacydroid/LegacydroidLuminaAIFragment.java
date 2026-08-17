@@ -32,7 +32,7 @@ public class LegacydroidLuminaAIFragment extends DashboardFragment {
     private static final String TAG = "LegacydroidLuminaAI";
 
     private static final String KEY_POWER_BUTTON = "legacydroid_luminaai_power_button";
-    private static final String SETTING_POWER_BUTTON = "legacydroid_luminaai_power_button";
+    private static final String SETTING_POWER_BUTTON = Settings.Global.LUMINA_POWER_BUTTON;
     private static final String KEY_PREVIEW = "legacydroid_luminaai_preview";
 
     private static final String LUMINA_PACKAGE = "com.legacydroid.luminaai";
