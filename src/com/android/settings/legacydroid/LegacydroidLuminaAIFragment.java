@@ -6,11 +6,13 @@
 package com.android.settings.legacydroid;
 
 import android.app.settings.SettingsEnums;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.util.Log;
 
 import androidx.preference.Preference;
 import androidx.preference.SwitchPreferenceCompat;
@@ -88,7 +90,11 @@ public class LegacydroidLuminaAIFragment extends DashboardFragment {
             final Intent intent = new Intent();
             intent.setComponent(new ComponentName(LUMINA_PACKAGE, LUMINA_ACTIVITY));
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
+            try {
+                context.startActivity(intent);
+            } catch (ActivityNotFoundException | SecurityException e) {
+                Log.w(TAG, "LuminaAI preview unavailable", e);
+            }
             return true;
         });
     }
