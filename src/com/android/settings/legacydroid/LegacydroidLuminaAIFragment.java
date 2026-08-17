@@ -33,9 +33,8 @@ public class LegacydroidLuminaAIFragment extends DashboardFragment {
     private static final String SETTING_POWER_BUTTON = "legacydroid_luminaai_power_button";
     private static final String KEY_PREVIEW = "legacydroid_luminaai_preview";
 
-    private static final String ACTION_LUMINA_TRIGGER = "com.legacydroid.luminaai.TRIGGER";
     private static final String LUMINA_PACKAGE = "com.legacydroid.luminaai";
-    private static final String LUMINA_RECEIVER = "com.legacydroid.luminaai.LuminaTriggerReceiver";
+    private static final String LUMINA_ACTIVITY = "com.legacydroid.luminaai.LuminaOverlayActivity";
 
     @Override
     protected int getPreferenceScreenResId() {
@@ -83,9 +82,13 @@ public class LegacydroidLuminaAIFragment extends DashboardFragment {
             if (context == null) {
                 return true;
             }
-            final Intent intent = new Intent(ACTION_LUMINA_TRIGGER);
-            intent.setComponent(new ComponentName(LUMINA_PACKAGE, LUMINA_RECEIVER));
-            context.sendBroadcast(intent);
+            // Explicit activity start: a foreground caller is always allowed to
+            // launch it, unlike a broadcast to a cold manifest receiver, which
+            // the broadcast queue refuses to start in the background.
+            final Intent intent = new Intent();
+            intent.setComponent(new ComponentName(LUMINA_PACKAGE, LUMINA_ACTIVITY));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
             return true;
         });
     }
