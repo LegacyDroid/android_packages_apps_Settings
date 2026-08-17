@@ -18,6 +18,13 @@
             android:title="@string/legacydroid_appearance_title"
             android:summary="@string/legacydroid_appearance_summary"/>
 
+        <Preference
+            android:fragment="com.android.settings.legacydroid.LegacydroidLuminaAIFragment"
+            android:icon="@drawable/ic_lumina_ai"
+            android:key="legacydroid_luminaai"
+            android:title="@string/legacydroid_luminaai_title"
+            android:summary="@string/legacydroid_luminaai_summary"/>
+
     </PreferenceCategory>
 
 </PreferenceScreen>

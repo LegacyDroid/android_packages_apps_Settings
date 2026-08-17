@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: 2026 The LegacyDroid Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="legacydroid_luminaai">
+
+    <PreferenceCategory
+        android:key="legacydroid_luminaai_category"
+        android:title="@string/legacydroid_luminaai_category_title">
+
+        <SwitchPreferenceCompat
+            android:key="legacydroid_luminaai_power_button"
+            android:title="@string/legacydroid_luminaai_power_button_title"
+            android:summary="@string/legacydroid_luminaai_power_button_summary"
+            android:defaultValue="false"
+            android:persistent="false"/>
+
+        <Preference
+            android:key="legacydroid_luminaai_preview"
+            android:title="@string/legacydroid_luminaai_preview_title"
+            android:summary="@string/legacydroid_luminaai_preview_summary"
+            android:icon="@drawable/ic_lumina_ai"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

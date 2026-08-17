@@ -39,4 +39,12 @@
     <string name="legacydroid_charging_image_transparency_title">Image transparency</string>
     <string name="legacydroid_charging_image_size_title">Image size</string>
 
+    <string name="legacydroid_luminaai_title">LuminaAI</string>
+    <string name="legacydroid_luminaai_summary">AI assistant and power button trigger</string>
+    <string name="legacydroid_luminaai_category_title">LuminaAI</string>
+    <string name="legacydroid_luminaai_power_button_title">Use power button to trigger LuminaAI</string>
+    <string name="legacydroid_luminaai_power_button_summary">Hold the power button to open LuminaAI instead of the power menu</string>
+    <string name="legacydroid_luminaai_preview_title">Preview LuminaAI</string>
+    <string name="legacydroid_luminaai_preview_summary">Show the Lumina overlay for a quick look</string>
+
 </resources>

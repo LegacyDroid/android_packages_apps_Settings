@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     SPDX-FileCopyrightText: 2026 The LegacyDroid Project
+     SPDX-License-Identifier: Apache-2.0
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+        android:width="24dp"
+        android:height="24dp"
+        android:viewportWidth="24"
+        android:viewportHeight="24">
+  <path
+      android:pathData="M12,4a8,8 0,1 0,0 16a8,8 0,1 0,0 -16">
+    <gradient
+        android:type="radial"
+        android:gradientRadius="8"
+        android:centerX="9.5"
+        android:centerY="9.5"
+        android:startColor="#FFFF6B5E"
+        android:centerColor="#FFFFA552"
+        android:endColor="#FFC490E8"/>
+  </path>
+  <path
+      android:fillColor="#E6FFFFFF"
+      android:pathData="M12,7.2l1.05,3.15l3.15,1.05l-3.15,1.05l-1.05,3.15l-1.05,-3.15l-3.15,-1.05l3.15,-1.05z"/>
+</vector>
