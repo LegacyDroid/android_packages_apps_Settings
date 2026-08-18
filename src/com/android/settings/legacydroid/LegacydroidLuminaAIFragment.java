@@ -140,8 +140,9 @@ public class LegacydroidLuminaAIFragment extends DashboardFragment {
         provider.setOnPreferenceChangeListener((preference, newValue) -> {
             final String value = (String) newValue;
             Settings.Global.putString(getContentResolver(), SETTING_PROVIDER, value);
+            provider.setValue(value);
             provider.setSummary(provider.getEntry());
-            updateCustomVisibility(PROVIDER_CUSTOM.equals(provider.getValue()),
+            updateCustomVisibility(PROVIDER_CUSTOM.equals(value),
                     customUrl, customKey, customModel);
             return true;
         });
@@ -152,6 +153,7 @@ public class LegacydroidLuminaAIFragment extends DashboardFragment {
             model.setSummary(model.getEntry());
             model.setOnPreferenceChangeListener((preference, newValue) -> {
                 Settings.Global.putString(getContentResolver(), SETTING_MODEL, (String) newValue);
+                model.setValue((String) newValue);
                 model.setSummary(model.getEntry());
                 return true;
             });
