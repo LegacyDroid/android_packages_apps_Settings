@@ -47,4 +47,90 @@
     <string name="legacydroid_luminaai_preview_title">Preview LuminaAI</string>
     <string name="legacydroid_luminaai_preview_summary">Show the Lumina overlay for a quick look</string>
 
+    <string name="legacydroid_luminaai_engine_category_title">AI engine</string>
+    <string name="legacydroid_luminaai_provider_title">Engine provider</string>
+    <string name="legacydroid_luminaai_provider_summary">Where Lumina runs her brain</string>
+    <string name="legacydroid_luminaai_model_title">Model</string>
+    <string name="legacydroid_luminaai_model_summary">Model used for chat and tool calls</string>
+    <string name="legacydroid_luminaai_custom_url_title">Custom base URL</string>
+    <string name="legacydroid_luminaai_custom_url_summary">OpenAI-compatible endpoint, e.g. https://api.openai.com/v1</string>
+    <string name="legacydroid_luminaai_custom_key_title">Custom API key</string>
+    <string name="legacydroid_luminaai_custom_key_summary">API key for the custom endpoint</string>
+    <string name="legacydroid_luminaai_custom_model_title">Custom model name</string>
+    <string name="legacydroid_luminaai_custom_model_summary">Model ID for the custom endpoint</string>
+
+    <string name="legacydroid_luminaai_behavior_category_title">Behavior</string>
+    <string name="legacydroid_luminaai_privacy_alerts_title">Privacy alerts</string>
+    <string name="legacydroid_luminaai_privacy_alerts_summary">Lumina audits background camera/location/mic access on wake</string>
+    <string name="legacydroid_luminaai_auto_otp_title">Auto-copy OTP codes</string>
+    <string name="legacydroid_luminaai_auto_otp_summary">Copy verification codes from notifications and dismiss them</string>
+    <string name="legacydroid_luminaai_dev_mode_title">Unsafe Developer Mode</string>
+    <string name="legacydroid_luminaai_dev_mode_summary">Unlock raw shell commands for Lumina. Use at your own risk</string>
+
+    <string name="legacydroid_luminaai_tools_category_title">Tool permissions</string>
+    <string name="legacydroid_luminaai_tools_summary">Disable tools you never want Lumina to use</string>
+
+    <string-array name="legacydroid_luminaai_provider_entries">
+        <item>Gemini (Google)</item>
+        <item>OpenCode Zen Free</item>
+        <item>Custom (OpenAI-compatible)</item>
+    </string-array>
+    <string-array name="legacydroid_luminaai_provider_values">
+        <item>gemini</item>
+        <item>opencode</item>
+        <item>custom</item>
+    </string-array>
+
+    <string-array name="legacydroid_luminaai_model_entries">
+        <item>Gemini 3.5 Flash Lite</item>
+        <item>Gemini 3.7 Flash</item>
+        <item>Gemini 3.6 Flash</item>
+        <item>Gemini 3 Flash</item>
+        <item>Gemma 4 26B MoE</item>
+        <item>Gemma 4 31B Dense</item>
+        <item>DeepSeek V4 Flash Free</item>
+        <item>Big Pickle</item>
+        <item>Nemotron 3.5 Lightning Free</item>
+        <item>Laguna S 2.1 Free</item>
+        <item>Hy3 Free</item>
+        <item>Nemotron 3 Ultra Free</item>
+        <item>Mimo V2.5 Free</item>
+    </string-array>
+    <string-array name="legacydroid_luminaai_model_values">
+        <item>gemini-3.5-flash-lite</item>
+        <item>gemini-3.7-flash</item>
+        <item>gemini-3.6-flash</item>
+        <item>gemini-3-flash</item>
+        <item>gemma-4-26b-a4b-it</item>
+        <item>gemma-4-31b-it</item>
+        <item>deepseek-v4-flash-free</item>
+        <item>big-pickle</item>
+        <item>nemotron-3.5-lightning-free</item>
+        <item>laguna-s-2.1-free</item>
+        <item>hy3-free</item>
+        <item>nemotron-3-ultra-free</item>
+        <item>mimo-v2.5-free</item>
+    </string-array>
+
+    <string-array name="legacydroid_luminaai_tools">
+        <item>get_battery</item>
+        <item>get_telemetry</item>
+        <item>toggle_wifi</item>
+        <item>set_brightness</item>
+        <item>set_volume</item>
+        <item>toggle_flashlight</item>
+        <item>open_app</item>
+        <item>set_power_profile</item>
+        <item>set_clipboard</item>
+        <item>get_recent_notifications</item>
+        <item>extract_otp</item>
+        <item>remember_memory</item>
+        <item>search_memories</item>
+        <item>forget_memory</item>
+        <item>search_local</item>
+        <item>audit_privacy</item>
+        <item>revoke_permission</item>
+        <item>run_shell</item>
+    </string-array>
+
 </resources>

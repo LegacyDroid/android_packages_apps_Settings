@@ -26,4 +26,81 @@
 
     </PreferenceCategory>
 
+    <PreferenceCategory
+        android:key="legacydroid_luminaai_engine_category"
+        android:title="@string/legacydroid_luminaai_engine_category_title">
+
+        <ListPreference
+            android:key="legacydroid_luminaai_provider"
+            android:title="@string/legacydroid_luminaai_provider_title"
+            android:summary="@string/legacydroid_luminaai_provider_summary"
+            android:entries="@array/legacydroid_luminaai_provider_entries"
+            android:entryValues="@array/legacydroid_luminaai_provider_values"
+            android:defaultValue="gemini"
+            android:persistent="false"/>
+
+        <ListPreference
+            android:key="legacydroid_luminaai_model"
+            android:title="@string/legacydroid_luminaai_model_title"
+            android:summary="@string/legacydroid_luminaai_model_summary"
+            android:entries="@array/legacydroid_luminaai_model_entries"
+            android:entryValues="@array/legacydroid_luminaai_model_values"
+            android:defaultValue="gemini-3.5-flash-lite"
+            android:persistent="false"/>
+
+        <EditTextPreference
+            android:key="legacydroid_luminaai_custom_base_url"
+            android:title="@string/legacydroid_luminaai_custom_url_title"
+            android:summary="@string/legacydroid_luminaai_custom_url_summary"
+            android:persistent="false"
+            android:visible="false"/>
+
+        <EditTextPreference
+            android:key="legacydroid_luminaai_custom_api_key"
+            android:title="@string/legacydroid_luminaai_custom_key_title"
+            android:summary="@string/legacydroid_luminaai_custom_key_summary"
+            android:persistent="false"
+            android:visible="false"/>
+
+        <EditTextPreference
+            android:key="legacydroid_luminaai_custom_model"
+            android:title="@string/legacydroid_luminaai_custom_model_title"
+            android:summary="@string/legacydroid_luminaai_custom_model_summary"
+            android:persistent="false"
+            android:visible="false"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="legacydroid_luminaai_behavior_category"
+        android:title="@string/legacydroid_luminaai_behavior_category_title">
+
+        <SwitchPreferenceCompat
+            android:key="legacydroid_luminaai_privacy_alerts"
+            android:title="@string/legacydroid_luminaai_privacy_alerts_title"
+            android:summary="@string/legacydroid_luminaai_privacy_alerts_summary"
+            android:defaultValue="true"
+            android:persistent="false"/>
+
+        <SwitchPreferenceCompat
+            android:key="legacydroid_luminaai_auto_otp"
+            android:title="@string/legacydroid_luminaai_auto_otp_title"
+            android:summary="@string/legacydroid_luminaai_auto_otp_summary"
+            android:defaultValue="true"
+            android:persistent="false"/>
+
+        <SwitchPreferenceCompat
+            android:key="legacydroid_luminaai_unsafe_dev_mode"
+            android:title="@string/legacydroid_luminaai_dev_mode_title"
+            android:summary="@string/legacydroid_luminaai_dev_mode_summary"
+            android:defaultValue="false"
+            android:persistent="false"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="legacydroid_luminaai_tools_category"
+        android:title="@string/legacydroid_luminaai_tools_category_title"
+        android:summary="@string/legacydroid_luminaai_tools_summary"/>
+
 </PreferenceScreen>
