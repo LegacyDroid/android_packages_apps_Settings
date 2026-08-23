@@ -135,7 +135,7 @@ public class LegacydroidLuminaAIFragment extends DashboardFragment {
             return;
         }
         final String providerValue = Settings.Global.getString(getContentResolver(), SETTING_PROVIDER);
-        provider.setValue(providerValue != null ? providerValue : "gemini");
+        provider.setValue(providerValue != null ? providerValue : "lumina");
         provider.setSummary(provider.getEntry());
         provider.setOnPreferenceChangeListener((preference, newValue) -> {
             final String value = (String) newValue;
@@ -149,7 +149,7 @@ public class LegacydroidLuminaAIFragment extends DashboardFragment {
 
         if (model != null) {
             final String modelValue = Settings.Global.getString(getContentResolver(), SETTING_MODEL);
-            model.setValue(modelValue != null ? modelValue : "gemini-3.5-flash-lite");
+            model.setValue(modelValue != null ? modelValue : "gemini-3.7-flash");
             model.setSummary(model.getEntry());
             model.setOnPreferenceChangeListener((preference, newValue) -> {
                 Settings.Global.putString(getContentResolver(), SETTING_MODEL, (String) newValue);

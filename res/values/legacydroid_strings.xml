@@ -71,24 +71,22 @@
     <string name="legacydroid_luminaai_tools_summary">Disable tools you never want Lumina to use</string>
 
     <string-array name="legacydroid_luminaai_provider_entries">
-        <item>Gemini (Google)</item>
-        <item>OpenCode Zen Free</item>
+        <item>Lumina Cloud (recommended)</item>
         <item>Custom (OpenAI-compatible)</item>
     </string-array>
     <string-array name="legacydroid_luminaai_provider_values">
-        <item>gemini</item>
-        <item>opencode</item>
+        <item>lumina</item>
         <item>custom</item>
     </string-array>
 
     <string-array name="legacydroid_luminaai_model_entries">
-        <item>Gemini 3.5 Flash Lite</item>
-        <item>Gemini 3.7 Flash</item>
+        <item>Gemini 3.7 Flash (default)</item>
         <item>Gemini 3.6 Flash</item>
         <item>Gemini 3 Flash</item>
+        <item>Gemini 3.5 Flash Lite</item>
         <item>Gemma 4 26B MoE</item>
         <item>Gemma 4 31B Dense</item>
-        <item>DeepSeek V4 Flash Free</item>
+        <item>Ox Alpha Free (unlimited)</item>
         <item>Big Pickle</item>
         <item>Nemotron 3.5 Lightning Free</item>
         <item>Laguna S 2.1 Free</item>
@@ -97,13 +95,13 @@
         <item>Mimo V2.5 Free</item>
     </string-array>
     <string-array name="legacydroid_luminaai_model_values">
-        <item>gemini-3.5-flash-lite</item>
         <item>gemini-3.7-flash</item>
         <item>gemini-3.6-flash</item>
         <item>gemini-3-flash</item>
+        <item>gemini-3.5-flash-lite</item>
         <item>gemma-4-26b-a4b-it</item>
         <item>gemma-4-31b-it</item>
-        <item>deepseek-v4-flash-free</item>
+        <item>x-preview-f-free</item>
         <item>big-pickle</item>
         <item>nemotron-3.5-lightning-free</item>
         <item>laguna-s-2.1-free</item>

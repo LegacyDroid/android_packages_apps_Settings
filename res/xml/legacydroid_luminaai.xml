@@ -36,7 +36,7 @@
             android:summary="@string/legacydroid_luminaai_provider_summary"
             android:entries="@array/legacydroid_luminaai_provider_entries"
             android:entryValues="@array/legacydroid_luminaai_provider_values"
-            android:defaultValue="gemini"
+            android:defaultValue="lumina"
             android:persistent="false"/>
 
         <ListPreference
@@ -45,7 +45,7 @@
             android:summary="@string/legacydroid_luminaai_model_summary"
             android:entries="@array/legacydroid_luminaai_model_entries"
             android:entryValues="@array/legacydroid_luminaai_model_values"
-            android:defaultValue="gemini-3.5-flash-lite"
+            android:defaultValue="gemini-3.7-flash"
             android:persistent="false"/>
 
         <EditTextPreference
