@@ -3658,6 +3658,20 @@
     <string name="location_time_zone_detection_auto_is_on">Location may be used to set time zone</string>
     <!-- Main settings screen, setting summary for the user to go into the About phone screen-->
     <string name="about_settings_summary">View legal info, status, software version</string>
+    <!-- About device hero card: ROM branding shown below the model name [CHAR LIMIT=32] -->
+    <string name="about_device_os_version">LegacyDroid 14</string>
+    <!-- About device: storage usage caption [CHAR LIMIT=NONE] -->
+    <string name="about_device_storage_summary"><xliff:g id="used" example="140GB">%1$s</xliff:g> used \u2022 <xliff:g id="free" example="372GB">%2$s</xliff:g> free</string>
+    <!-- About device main page: entry to advanced about-device settings [CHAR LIMIT=32] -->
+    <string name="about_device_more_title">More</string>
+    <!-- About device spec card labels [CHAR LIMIT=32] -->
+    <string name="about_spec_processor">Processor</string>
+    <string name="about_spec_battery">Battery</string>
+    <string name="about_spec_ram">RAM</string>
+    <!-- About device storage card value [CHAR LIMIT=32] -->
+    <string name="about_storage_value_summary"><xliff:g id="used" example="140GB">%1$s</xliff:g> / <xliff:g id="total" example="512GB">%2$s</xliff:g></string>
+    <!-- About device battery spec value [CHAR LIMIT=16] -->
+    <string name="about_battery_value_summary"><xliff:g id="capacity" example="5000">%1$d</xliff:g> mAh</string>
     <!-- About phone settings screen, setting option name to go to dialog that shows legal info -->
     <string name="legal_information">Legal information</string>
     <!-- About phone settings screen, setting option name to show Manual [CHAR LIMIT=25] -->

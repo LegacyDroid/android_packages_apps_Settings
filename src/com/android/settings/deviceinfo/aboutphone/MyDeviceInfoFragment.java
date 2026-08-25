@@ -16,56 +16,40 @@
 
 package com.android.settings.deviceinfo.aboutphone;
 
-import android.app.Activity;
+import android.app.ActivityManager;
 import android.app.settings.SettingsEnums;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.UserInfo;
-import android.os.Bundle;
-import android.os.UserManager;
+import android.os.Build;
+import android.os.storage.StorageManager;
+import android.provider.Settings;
+import android.text.TextUtils;
+import android.text.format.Formatter;
 import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.android.settings.R;
 import com.android.settings.Utils;
 import com.android.settings.dashboard.DashboardFragment;
-import com.android.settings.deviceinfo.BluetoothAddressPreferenceController;
-import com.android.settings.deviceinfo.BuildNumberPreferenceController;
-import com.android.settings.deviceinfo.DeviceNamePreferenceController;
-import com.android.settings.deviceinfo.FccEquipmentIdPreferenceController;
-import com.android.settings.deviceinfo.FeedbackPreferenceController;
-import com.android.settings.deviceinfo.IpAddressPreferenceController;
-import com.android.settings.deviceinfo.ManualPreferenceController;
-import com.android.settings.deviceinfo.RegulatoryInfoPreferenceController;
-import com.android.settings.deviceinfo.SafetyInfoPreferenceController;
-import com.android.settings.deviceinfo.UptimePreferenceController;
-import com.android.settings.deviceinfo.WifiMacAddressPreferenceController;
-import com.android.settings.deviceinfo.imei.ImeiInfoPreferenceController;
-import com.android.settings.deviceinfo.simstatus.EidStatus;
-import com.android.settings.deviceinfo.simstatus.SimEidPreferenceController;
-import com.android.settings.deviceinfo.simstatus.SimStatusPreferenceController;
-import com.android.settings.deviceinfo.simstatus.SlotSimStatus;
+import com.android.settings.dashboard.profileselector.ProfileSelectFragment.ProfileType;
+import com.android.settings.deviceinfo.storage.StorageCacheHelper;
 import com.android.settings.search.BaseSearchIndexProvider;
-import com.android.settings.widget.EntityHeaderController;
 import com.android.settingslib.core.AbstractPreferenceController;
-import com.android.settingslib.core.lifecycle.Lifecycle;
+import com.android.settingslib.deviceinfo.PrivateStorageInfo;
+import com.android.settingslib.deviceinfo.StorageManagerVolumeProvider;
 import com.android.settingslib.search.SearchIndexable;
+import com.android.settingslib.utils.ThreadUtils;
 import com.android.settingslib.widget.LayoutPreference;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.function.Consumer;
 
 @SearchIndexable
-public class MyDeviceInfoFragment extends DashboardFragment
-        implements DeviceNamePreferenceController.DeviceNamePreferenceHost {
+public class MyDeviceInfoFragment extends DashboardFragment {
 
     private static final String LOG_TAG = "MyDeviceInfoFragment";
-    private static final String KEY_EID_INFO = "eid_info";
     private static final String KEY_MY_DEVICE_INFO_HEADER = "my_device_info_header";
-
-    private BuildNumberPreferenceController mBuildNumberPreferenceController;
 
     @Override
     public int getMetricsCategory() {
@@ -75,20 +59,6 @@ public class MyDeviceInfoFragment extends DashboardFragment
     @Override
     public int getHelpResource() {
         return R.string.help_uri_about;
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        use(DeviceNamePreferenceController.class).setHost(this /* parent */);
-        mBuildNumberPreferenceController = use(BuildNumberPreferenceController.class);
-        mBuildNumberPreferenceController.setHost(this /* parent */);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        initHeader();
     }
 
     @Override
@@ -103,73 +73,22 @@ public class MyDeviceInfoFragment extends DashboardFragment
 
     @Override
     protected List<AbstractPreferenceController> createPreferenceControllers(Context context) {
-        return buildPreferenceControllers(context, this /* fragment */, getSettingsLifecycle());
-    }
-
-    private static List<AbstractPreferenceController> buildPreferenceControllers(
-            Context context, MyDeviceInfoFragment fragment, Lifecycle lifecycle) {
-        final List<AbstractPreferenceController> controllers = new ArrayList<>();
-
-        final ExecutorService executor = (fragment == null) ? null :
-                Executors.newSingleThreadExecutor();
-        androidx.lifecycle.Lifecycle lifecycleObject = (fragment == null) ? null :
-                fragment.getLifecycle();
-        final SlotSimStatus slotSimStatus = new SlotSimStatus(context, executor, lifecycleObject);
-
-        controllers.add(new IpAddressPreferenceController(context, lifecycle));
-        controllers.add(new WifiMacAddressPreferenceController(context, lifecycle));
-        controllers.add(new BluetoothAddressPreferenceController(context, lifecycle));
-        controllers.add(new RegulatoryInfoPreferenceController(context));
-        controllers.add(new SafetyInfoPreferenceController(context));
-        controllers.add(new ManualPreferenceController(context));
-        controllers.add(new FeedbackPreferenceController(fragment, context));
-        controllers.add(new FccEquipmentIdPreferenceController(context));
-        controllers.add(new UptimePreferenceController(context, lifecycle));
-
-        Consumer<String> imeiInfoList = imeiKey -> {
-            ImeiInfoPreferenceController imeiRecord =
-                    new ImeiInfoPreferenceController(context, imeiKey);
-            imeiRecord.init(fragment, slotSimStatus);
-            controllers.add(imeiRecord);
-        };
-
-        if (fragment != null) {
-            imeiInfoList.accept(ImeiInfoPreferenceController.DEFAULT_KEY);
-        }
-
-        for (int slotIndex = 0; slotIndex < slotSimStatus.size(); slotIndex ++) {
-            SimStatusPreferenceController slotRecord =
-                    new SimStatusPreferenceController(context,
-                    slotSimStatus.getPreferenceKey(slotIndex));
-            slotRecord.init(fragment, slotSimStatus);
-            controllers.add(slotRecord);
-
-            if (fragment != null) {
-                imeiInfoList.accept(ImeiInfoPreferenceController.DEFAULT_KEY + (1 + slotIndex));
-            }
-        }
-
-        EidStatus eidStatus = new EidStatus(slotSimStatus, context, executor);
-        SimEidPreferenceController simEid = new SimEidPreferenceController(context, KEY_EID_INFO);
-        simEid.init(slotSimStatus, eidStatus);
-        controllers.add(simEid);
-
-        if (executor != null) {
-            executor.shutdown();
-        }
-        return controllers;
+        return new ArrayList<>();
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (mBuildNumberPreferenceController.onActivityResult(requestCode, resultCode, data)) {
-            return;
-        }
-        super.onActivityResult(requestCode, resultCode, data);
+    public void onStart() {
+        super.onStart();
+        initHeader();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        bindHeaderViews();
     }
 
     private void initHeader() {
-        // TODO: Migrate into its own controller.
         final LayoutPreference headerPreference =
                 getPreferenceScreen().findPreference(KEY_MY_DEVICE_INFO_HEADER);
         final boolean shouldDisplayHeader = getContext().getResources().getBoolean(
@@ -178,50 +97,105 @@ public class MyDeviceInfoFragment extends DashboardFragment
         if (!shouldDisplayHeader) {
             return;
         }
-        final View headerView = headerPreference.findViewById(R.id.entity_header);
-        final Activity context = getActivity();
-        final Bundle bundle = getArguments();
-        final EntityHeaderController controller = EntityHeaderController
-                .newInstance(context, this, headerView)
-                .setButtonActions(EntityHeaderController.ActionType.ACTION_NONE,
-                        EntityHeaderController.ActionType.ACTION_NONE);
+        final View headerView = headerPreference.findViewById(R.id.about_device_header);
 
-        // TODO: There may be an avatar setting action we can use here.
-        final int iconId = bundle.getInt("icon_id", 0);
-        if (iconId == 0) {
-            final UserManager userManager = (UserManager) getActivity().getSystemService(
-                    Context.USER_SERVICE);
-            final UserInfo info = Utils.getExistingUser(userManager,
-                    android.os.Process.myUserHandle());
-            controller.setLabel(info.name);
-            controller.setIcon(
-                    com.android.settingslib.Utils.getUserIcon(getActivity(), userManager, info));
+        final TextView modelName = headerView.findViewById(R.id.about_model_name);
+        modelName.setText(Build.MODEL);
+
+        final View deviceNameCard = headerView.findViewById(R.id.about_device_name_card);
+        deviceNameCard.setOnClickListener(v -> openAboutDeviceMore());
+
+        final View storageCard = headerView.findViewById(R.id.about_storage_card);
+        storageCard.setOnClickListener(v -> {
+            startActivity(new Intent(Settings.ACTION_INTERNAL_STORAGE_SETTINGS));
+        });
+
+        bindSpecs(headerView);
+    }
+
+    private void bindHeaderViews() {
+        final LayoutPreference headerPreference =
+                getPreferenceScreen().findPreference(KEY_MY_DEVICE_INFO_HEADER);
+        final View headerView = headerPreference.findViewById(R.id.about_device_header);
+
+        final TextView deviceNameValue = headerView.findViewById(R.id.about_device_name_value);
+        String deviceName = Settings.Global.getString(getContext().getContentResolver(),
+                Settings.Global.DEVICE_NAME);
+        if (TextUtils.isEmpty(deviceName)) {
+            deviceName = Build.MODEL;
+        }
+        deviceNameValue.setText(deviceName);
+
+        bindStorageInfo(headerView);
+    }
+
+    private void bindStorageInfo(View headerView) {
+        final TextView caption = headerView.findViewById(R.id.about_storage_caption);
+        final ProgressBar bar = headerView.findViewById(R.id.about_storage_bar);
+        final int userId = Utils.getCurrentUserIdOfType(
+                getContext().getSystemService(android.os.UserManager.class),
+                ProfileType.PERSONAL);
+        final StorageCacheHelper storageCacheHelper = new StorageCacheHelper(getContext(), userId);
+
+        long cachedUsedSize = storageCacheHelper.retrieveUsedSize();
+        long cachedTotalSize = storageCacheHelper.retrieveCachedSize().totalSize;
+        if (cachedUsedSize != 0 && cachedTotalSize != 0) {
+            updateStorageInfo(caption, bar, cachedUsedSize, cachedTotalSize);
         }
 
-        controller.done(true /* rebindActions */);
+        ThreadUtils.postOnBackgroundThread(() -> {
+            final PrivateStorageInfo info = PrivateStorageInfo.getPrivateStorageInfo(
+                    new StorageManagerVolumeProvider(
+                            getContext().getSystemService(StorageManager.class)));
+            long usedBytes = info.totalBytes - info.freeBytes;
+            storageCacheHelper.cacheUsedSize(usedBytes);
+            ThreadUtils.postOnMainThread(() ->
+                    updateStorageInfo(caption, bar, usedBytes, info.totalBytes));
+        });
     }
 
-    @Override
-    public void showDeviceNameWarningDialog(String deviceName) {
-        DeviceNameWarningDialog.show(this);
+    private static void updateStorageInfo(
+            TextView caption, ProgressBar bar, long usedBytes, long totalBytes) {
+        if (totalBytes == 0L) {
+            return;
+        }
+        final Context context = caption.getContext();
+        bar.setProgress((int) (usedBytes * 100 / totalBytes));
+        caption.setText(context.getString(R.string.about_storage_value_summary,
+                Formatter.formatShortFileSize(context, usedBytes),
+                Formatter.formatShortFileSize(context, totalBytes)));
     }
 
-    public void onSetDeviceNameConfirm(boolean confirm) {
-        final DeviceNamePreferenceController controller = use(DeviceNamePreferenceController.class);
-        controller.updateDeviceName(confirm);
+    private void bindSpecs(View headerView) {
+        final TextView processorValue = headerView.findViewById(R.id.about_processor_value);
+        final String socModel = Build.SOC_MODEL;
+        processorValue.setText(!TextUtils.isEmpty(socModel)
+                && !Build.UNKNOWN.equals(socModel) ? socModel : Build.HARDWARE);
+
+        final TextView batteryValue = headerView.findViewById(R.id.about_battery_value);
+        final double capacityMah =
+                new com.android.internal.os.PowerProfile(getContext()).getBatteryCapacity();
+        batteryValue.setText(getString(R.string.about_battery_value_summary,
+                Math.round(capacityMah)));
+
+        final TextView ramValue = headerView.findViewById(R.id.about_ram_value);
+        final ActivityManager.MemoryInfo memoryInfo = new ActivityManager.MemoryInfo();
+        final ActivityManager activityManager =
+                getContext().getSystemService(ActivityManager.class);
+        activityManager.getMemoryInfo(memoryInfo);
+        ramValue.setText(String.format("%.1f GB", memoryInfo.totalMem / (1024.0 * 1024 * 1024)));
+    }
+
+    private void openAboutDeviceMore() {
+        new com.android.settings.core.SubSettingLauncher(getContext())
+                .setDestination(AboutDeviceMoreFragment.class.getName())
+                .setSourceMetricsCategory(getMetricsCategory())
+                .launch();
     }
 
     /**
      * For Search.
      */
     public static final BaseSearchIndexProvider SEARCH_INDEX_DATA_PROVIDER =
-            new BaseSearchIndexProvider(R.xml.my_device_info) {
-
-                @Override
-                public List<AbstractPreferenceController> createPreferenceControllers(
-                        Context context) {
-                    return buildPreferenceControllers(context, null /* fragment */,
-                            null /* lifecycle */);
-                }
-            };
+            new BaseSearchIndexProvider(R.xml.my_device_info);
 }
