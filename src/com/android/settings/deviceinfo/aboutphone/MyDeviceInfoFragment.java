@@ -42,6 +42,9 @@ import com.android.settingslib.search.SearchIndexable;
 import com.android.settingslib.utils.ThreadUtils;
 import com.android.settingslib.widget.LayoutPreference;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -168,9 +171,7 @@ public class MyDeviceInfoFragment extends DashboardFragment {
 
     private void bindSpecs(View headerView) {
         final TextView processorValue = headerView.findViewById(R.id.about_processor_value);
-        final String socModel = Build.SOC_MODEL;
-        processorValue.setText(!TextUtils.isEmpty(socModel)
-                && !Build.UNKNOWN.equals(socModel) ? socModel : Build.HARDWARE);
+        processorValue.setText(getProcessorName());
 
         final TextView batteryValue = headerView.findViewById(R.id.about_battery_value);
         final double capacityMah =
@@ -184,6 +185,28 @@ public class MyDeviceInfoFragment extends DashboardFragment {
                 getContext().getSystemService(ActivityManager.class);
         activityManager.getMemoryInfo(memoryInfo);
         ramValue.setText(String.format("%.1f GB", memoryInfo.totalMem / (1024.0 * 1024 * 1024)));
+    }
+
+    private static String getProcessorName() {
+        try (BufferedReader reader = new BufferedReader(
+                new FileReader("/proc/cpuinfo"))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                if (line.startsWith("model name")) {
+                    final int idx = line.indexOf(':');
+                    if (idx >= 0 && idx + 1 < line.length()) {
+                        return line.substring(idx + 1).trim();
+                    }
+                }
+            }
+        } catch (IOException e) {
+            // ignore, fall through
+        }
+        final String socModel = Build.SOC_MODEL;
+        if (!TextUtils.isEmpty(socModel) && !Build.UNKNOWN.equals(socModel)) {
+            return socModel;
+        }
+        return Build.HARDWARE;
     }
 
     private void openAboutDeviceMore() {
