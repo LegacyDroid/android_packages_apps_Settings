@@ -11,6 +11,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
 
@@ -22,6 +24,16 @@ import androidx.preference.SwitchPreferenceCompat;
 
 import com.android.settings.R;
 import com.android.settings.dashboard.DashboardFragment;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * LuminaAI options: power-button trigger, overlay preview, AI engine
@@ -60,6 +72,12 @@ public class LegacydroidLuminaAIFragment extends DashboardFragment {
     private static final String LUMINA_ACTIVITY = "com.legacydroid.luminaai.LuminaOverlayActivity";
 
     private static final String PROVIDER_CUSTOM = "custom";
+
+    private static final int MODEL_FETCH_CONNECT_MS = 5_000;
+    private static final int MODEL_FETCH_READ_MS = 8_000;
+
+    /** Bumped to drop stale results when the endpoint or provider changes. */
+    private int mModelFetchGeneration;
 
     @Override
     protected int getPreferenceScreenResId() {
@@ -144,6 +162,11 @@ public class LegacydroidLuminaAIFragment extends DashboardFragment {
             provider.setSummary(provider.getEntry());
             updateCustomVisibility(PROVIDER_CUSTOM.equals(value),
                     customUrl, customKey, customModel);
+            if (PROVIDER_CUSTOM.equals(value)) {
+                fetchModelCatalog(model);
+            } else {
+                applyStaticModelEntries(model);
+            }
             return true;
         });
 
@@ -152,8 +175,18 @@ public class LegacydroidLuminaAIFragment extends DashboardFragment {
             model.setValue(modelValue != null ? modelValue : "gemini-3.7-flash");
             model.setSummary(model.getEntry());
             model.setOnPreferenceChangeListener((preference, newValue) -> {
-                Settings.Global.putString(getContentResolver(), SETTING_MODEL, (String) newValue);
-                model.setValue((String) newValue);
+                final String value = (String) newValue;
+                Settings.Global.putString(getContentResolver(), SETTING_MODEL, value);
+                if (PROVIDER_CUSTOM.equals(provider.getValue())) {
+                    // Mirror into the custom model slot: LumiApi reads that
+                    // one first, so a stale typed id must never shadow the
+                    // id just picked from the fetched catalog.
+                    Settings.Global.putString(getContentResolver(), SETTING_CUSTOM_MODEL, value);
+                    if (customModel != null) {
+                        customModel.setText(value);
+                    }
+                }
+                model.setValue(value);
                 model.setSummary(model.getEntry());
                 return true;
             });
@@ -163,6 +196,9 @@ public class LegacydroidLuminaAIFragment extends DashboardFragment {
             customUrl.setText(Settings.Global.getString(getContentResolver(), SETTING_CUSTOM_URL));
             customUrl.setOnPreferenceChangeListener((preference, newValue) -> {
                 Settings.Global.putString(getContentResolver(), SETTING_CUSTOM_URL, (String) newValue);
+                if (PROVIDER_CUSTOM.equals(provider.getValue())) {
+                    fetchModelCatalog(model);
+                }
                 return true;
             });
         }
@@ -170,19 +206,154 @@ public class LegacydroidLuminaAIFragment extends DashboardFragment {
             customKey.setText(Settings.Global.getString(getContentResolver(), SETTING_CUSTOM_KEY));
             customKey.setOnPreferenceChangeListener((preference, newValue) -> {
                 Settings.Global.putString(getContentResolver(), SETTING_CUSTOM_KEY, (String) newValue);
+                if (PROVIDER_CUSTOM.equals(provider.getValue())) {
+                    fetchModelCatalog(model);
+                }
                 return true;
             });
         }
         if (customModel != null) {
             customModel.setText(Settings.Global.getString(getContentResolver(), SETTING_CUSTOM_MODEL));
             customModel.setOnPreferenceChangeListener((preference, newValue) -> {
-                Settings.Global.putString(getContentResolver(), SETTING_CUSTOM_MODEL, (String) newValue);
+                final String value = ((String) newValue).trim();
+                Settings.Global.putString(getContentResolver(), SETTING_CUSTOM_MODEL, value);
+                Settings.Global.putString(getContentResolver(), SETTING_MODEL, value);
+                if (model != null) {
+                    model.setValue(value);
+                    model.setSummary(model.getEntry() != null ? model.getEntry() : value);
+                }
                 return true;
             });
         }
 
-        updateCustomVisibility(PROVIDER_CUSTOM.equals(provider.getValue()),
-                customUrl, customKey, customModel);
+        final boolean isCustom = PROVIDER_CUSTOM.equals(provider.getValue());
+        updateCustomVisibility(isCustom, customUrl, customKey, customModel);
+        if (isCustom) {
+            fetchModelCatalog(model);
+        } else {
+            applyStaticModelEntries(model);
+        }
+    }
+
+    private void applyStaticModelEntries(final ListPreference model) {
+        // Invalidate any in-flight catalog fetch so a stale custom result
+        // cannot land after the user switched back to Lumina Cloud.
+        mModelFetchGeneration++;
+        if (model == null) {
+            return;
+        }
+        model.setEntries(R.array.legacydroid_luminaai_model_entries);
+        model.setEntryValues(R.array.legacydroid_luminaai_model_values);
+        keepModelSummary(model);
+    }
+
+    private void keepModelSummary(final ListPreference model) {
+        final String current = Settings.Global.getString(getContentResolver(), SETTING_MODEL);
+        if (current != null) {
+            model.setValue(current);
+        }
+        model.setSummary(model.getEntry() != null ? model.getEntry() : model.getValue());
+    }
+
+    /**
+     * Pull the OpenAI-compatible {@code GET /v1/models} catalog so the user
+     * picks a model instead of typing its id. Falls back to the static list
+     * when the endpoint is unreachable or malformed.
+     */
+    private void fetchModelCatalog(final ListPreference model) {
+        if (model == null) {
+            return;
+        }
+        final String baseUrl = Settings.Global.getString(getContentResolver(), SETTING_CUSTOM_URL);
+        final String apiKey = Settings.Global.getString(getContentResolver(), SETTING_CUSTOM_KEY);
+        // Bump first: even an early return (blank URL) must orphan results
+        // fetched for the previous endpoint.
+        final int generation = ++mModelFetchGeneration;
+        if (baseUrl == null || baseUrl.trim().isEmpty()) {
+            return;
+        }
+        new Thread(() -> {
+            final List<String> ids = fetchModelIds(baseUrl.trim(), apiKey);
+            if (ids.isEmpty() || generation != mModelFetchGeneration) {
+                return;
+            }
+            // Post to the main looper instead of requireActivity(): the
+            // fragment can detach while the request is in flight.
+            new Handler(Looper.getMainLooper()).post(() -> {
+                if (generation != mModelFetchGeneration || !isAdded()) {
+                    return;
+                }
+                model.setEntries(ids.toArray(new String[0]));
+                model.setEntryValues(ids.toArray(new String[0]));
+                final String current = Settings.Global.getString(getContentResolver(), SETTING_MODEL);
+                if (current != null && !ids.contains(current)) {
+                    // Catalog no longer lists the saved model: keep it visible
+                    // so the summary does not go blank, then let the user pick.
+                    final List<String> extended = new ArrayList<>(ids);
+                    extended.add(0, current);
+                    model.setEntries(extended.toArray(new String[0]));
+                    model.setEntryValues(extended.toArray(new String[0]));
+                }
+                keepModelSummary(model);
+            });
+        }, "LuminaModelCatalog").start();
+    }
+
+    private static List<String> fetchModelIds(String baseUrl, String apiKey) {
+        String endpoint = baseUrl;
+        while (endpoint.endsWith("/")) {
+            endpoint = endpoint.substring(0, endpoint.length() - 1);
+        }
+        if (!endpoint.endsWith("/models")) {
+            endpoint = endpoint.endsWith("/v1")
+                    ? endpoint + "/models"
+                    : endpoint + "/v1/models";
+        }
+        HttpURLConnection conn = null;
+        try {
+            conn = (HttpURLConnection) new URL(endpoint).openConnection();
+            conn.setRequestMethod("GET");
+            conn.setConnectTimeout(MODEL_FETCH_CONNECT_MS);
+            conn.setReadTimeout(MODEL_FETCH_READ_MS);
+            if (apiKey != null && !apiKey.isBlank()) {
+                conn.setRequestProperty("Authorization", "Bearer " + apiKey);
+            }
+            final int code = conn.getResponseCode();
+            if (code != 200) {
+                Log.w(TAG, "Model catalog fetch failed: HTTP " + code);
+                return List.of();
+            }
+            final String raw;
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
+                final StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line);
+                }
+                raw = sb.toString();
+            }
+            final JSONArray data = new JSONObject(raw).optJSONArray("data");
+            if (data == null) {
+                return List.of();
+            }
+            final List<String> ids = new ArrayList<>();
+            for (int i = 0; i < data.length(); i++) {
+                final String id = data.optJSONObject(i) != null
+                        ? data.optJSONObject(i).optString("id")
+                        : data.optString(i);
+                if (!id.isBlank() && !ids.contains(id)) {
+                    ids.add(id);
+                }
+            }
+            return ids;
+        } catch (Exception e) {
+            Log.w(TAG, "Model catalog fetch failed", e);
+            return List.of();
+        } finally {
+            if (conn != null) {
+                conn.disconnect();
+            }
+        }
     }
 
     private void updateCustomVisibility(boolean visible, EditTextPreference url,
