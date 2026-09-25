@@ -10,7 +10,10 @@
 
     <string name="legacydroid_category_title">LegacyDroid</string>
     <string name="legacydroid_appearance_title">Appearance</string>
-    <string name="legacydroid_appearance_summary">Charging and display options</string>
+    <string name="legacydroid_appearance_summary">Customize system appearance</string>
+
+    <string name="legacydroid_liquid_glass_title">Liquid Glass (Experimental)</string>
+    <string name="legacydroid_liquid_glass_summary">Use Liquid Glass effects system-wide</string>
 
     <string name="legacydroid_charging_category">Charging</string>
 

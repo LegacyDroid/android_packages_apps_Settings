@@ -11,6 +11,13 @@
         android:key="legacydroid_category"
         android:title="@string/legacydroid_category_title">
 
+        <SwitchPreferenceCompat
+            android:key="legacydroid_liquid_glass"
+            android:title="@string/legacydroid_liquid_glass_title"
+            android:summary="@string/legacydroid_liquid_glass_summary"
+            android:defaultValue="true"
+            android:persistent="false"/>
+
         <Preference
             android:fragment="com.android.settings.legacydroid.LegacydroidChargingAnimationFragment"
             android:icon="@drawable/ic_battery_charging"
