@@ -12,9 +12,9 @@
         android:title="@string/legacydroid_category_title">
 
         <SwitchPreferenceCompat
-            android:key="legacydroid_liquid_glass"
-            android:title="@string/legacydroid_liquid_glass_title"
-            android:summary="@string/legacydroid_liquid_glass_summary"
+            android:key="legacydroid_blur"
+            android:title="@string/legacydroid_blur_title"
+            android:summary="@string/legacydroid_blur_summary"
             android:defaultValue="true"
             android:persistent="false"/>
 
